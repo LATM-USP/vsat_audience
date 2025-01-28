@@ -1,0 +1,69 @@
+{
+  "page": {
+    "login": {
+      "meta": {
+        "title": "Iniciar sessão • VSAT",
+        "description": "VSAT Iniciar sessão"
+      },
+      "heading": "Iniciar sessão",
+      "field": {
+        "email": {
+          "label": "Email",
+          "placeholder": "sophie@example.com"
+        }
+      },
+      "submit": {
+        "label": "Iniciar sessão"
+      },
+      "error": "Ocorreu um erro",
+      "common": {
+        "loading": {
+          "text": "Carregamento…"
+        }
+      }
+    },
+    "login-callback": {
+      "meta": {
+        "title": "Iniciar sessão • VSAT",
+        "description": "VSAT Iniciar sessão"
+      },
+      "common": {
+        "loading": {
+          "text": "Carregamento…"
+        }
+      }
+    },
+    "author": {
+      "meta": {
+        "title": "Autor • VSAT",
+        "description": "Sua página de autor"
+      },
+      "heading": "Sobre {{authorName}}",
+      "your-stories": "Suas histórias"
+    },
+    "stories": {
+      "meta": {
+        "title": "Histórias • VSAT",
+        "description": "Suas histórias"
+      },
+      "heading": "Histórias",
+      "action": {
+        "create-story": {
+          "label": "Nova história"
+        }
+      },
+      "common": {
+        "loading": {
+          "text": "Loading…"
+        }
+      }
+    },
+    "story": {
+      "meta": {
+        "title": "História • VSAT",
+        "description": "Sua história"
+      },
+      "heading": "{{title}}"
+    }
+  }
+}

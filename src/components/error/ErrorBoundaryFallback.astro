@@ -1,0 +1,39 @@
+---
+import { Icon } from "astro-icon/components";
+
+const { i18n } = Astro.locals.environment<App.WithI18N>();
+---
+
+<div class="errorBoundary">
+  <Icon name="noto-v1:fearful-face" size="large" />
+  <h1>{i18n.t("page.error.heading")}</h1>
+  <div>
+    <p>{i18n.t("page.error.content.admission")}</p>
+    <p>{i18n.t("page.error.content.remediation")}</p>
+  </div>
+</div>
+
+<style>
+  .errorBoundary {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    margin: 1rem;
+  }
+
+  div {
+    text-align: center;
+  }
+
+  h1 {
+    font-size: xx-large;
+    color: var(--color-text);
+  }
+
+  p {
+    margin-top: 1em;
+    font-size: larger;
+    color: var(--color-text);
+  }
+</style>

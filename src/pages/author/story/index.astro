@@ -1,0 +1,51 @@
+---
+import CreateStory from "../../../components/story/create/CreateStory";
+import Layout from "../../../layouts/AuthoringLayout.astro";
+
+const user = Astro.locals.user;
+if (!user?.id) {
+  return Astro.redirect("/login");
+}
+
+const { repositoryStory, i18n } = Astro.locals.environment<
+  App.WithStoryRepository & App.WithI18N
+>();
+
+let stories = await repositoryStory.getStoryTitlesByAuthor(user.id);
+
+if (!stories) {
+  stories = {
+    author: {
+      id: user.id,
+      name: user.name,
+    },
+    titles: [],
+  };
+}
+
+const translations = i18n.getTranslationsForPage({
+  locale: Astro.preferredLocale,
+  page: "stories",
+});
+---
+
+<Layout
+  title={i18n.t("page.stories.meta.title")}
+  description={i18n.t("page.stories.meta.description")}
+>
+  <h1>{i18n.t("page.stories.heading", { authorName: stories.author.name })}</h1>
+
+  <CreateStory translations={translations} client:only="react" />
+
+  <ul>
+    {
+      stories.titles.map((story) => {
+        return (
+          <li>
+            <a href={`/author/story/${story.id}`}>{story.title}</a>
+          </li>
+        );
+      })
+    }
+  </ul>
+</Layout>

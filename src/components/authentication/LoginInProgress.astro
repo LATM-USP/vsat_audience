@@ -1,0 +1,22 @@
+---
+import { Icon } from "astro-icon/components";
+
+const { i18n } = Astro.locals.environment<App.WithI18N>();
+---
+
+<div class="in-progress">
+  <Icon name="noto-v1:e-mail" size="medium" />
+  <h2>{i18n.t("page.login.message.heading")}</h2>
+  <div>{i18n.t("page.login.message.description")}</div>
+  <img src="/loading.svg" alt={i18n.t("page.login.common.loading.text")} />
+</div>
+
+<style>
+  .in-progress {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin: auto 2rem;
+  }
+</style>

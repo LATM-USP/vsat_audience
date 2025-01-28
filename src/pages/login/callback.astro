@@ -1,0 +1,52 @@
+---
+import { Icon } from "astro-icon/components";
+
+import Layout from "../../layouts/AuthoringLayout.astro";
+
+import "./_login.module.css";
+
+const { magic, i18n } = Astro.locals.environment<
+  App.WithMagicAuthenticationConfig & App.WithI18N
+>();
+---
+
+<script>
+  import authenticateWithServerUsingCredential from "../../authentication/client/authenticateWithServerUsingCredential.js";
+
+  const magicPublicKey =
+    document.getElementById("callback")!.dataset["magicPublicKey"]!;
+
+  authenticateWithServerUsingCredential(magicPublicKey)
+    .then(() => {
+      window.location.href = new URL(
+        `author/story`,
+        window.location.origin,
+      ).href;
+    })
+    .catch(() => {
+      window.location.href = new URL(
+        "/login?err=500",
+        window.location.origin,
+      ).href;
+    });
+</script>
+
+<Layout
+  title={i18n.t("page.login-callback.meta.title")}
+  description={i18n.t("page.login-callback.meta.description")}
+>
+  <main id="callback" data-magic-public-key={magic.publicKey}>
+    <Icon name="noto-v1:love-letter" size="medium" />
+    <div>{i18n.t("page.login-callback.message")}</div>
+    <img
+      src="/loading.svg"
+      alt={i18n.t("page.login-callback.common.loading.text")}
+    />
+  </main>
+</Layout>
+
+<style>
+  div {
+    margin: 1rem auto 0.5rem auto;
+  }
+</style>

@@ -1,0 +1,47 @@
+---
+import PublishedStory from "@components/story/published/PublishedStory";
+import toStoryId from "@domain/story/toStoryId";
+
+const storyId = toStoryId(Astro.params.storyId);
+
+if (!storyId) {
+  return Astro.redirect("/author/story?err=345");
+}
+
+const { i18n, repositoryStory } = Astro.locals.environment<
+  App.WithI18N & App.WithStoryRepository
+>();
+
+const story = await repositoryStory.getPublishedStory(storyId);
+
+if (!story) {
+  return Astro.redirect("/story?err=754");
+}
+
+const translations = i18n.getTranslationsForPage({
+  locale: Astro.preferredLocale,
+  page: "story",
+});
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta
+      name="description"
+      content={i18n.t("page.site.story.meta.description")}
+    />
+    <title>{story.title}</title>
+  </head>
+  <body>
+    <main>
+      <PublishedStory
+        story={story}
+        translations={translations}
+        client:only="react"
+      />
+    </main>
+  </body>
+</html>

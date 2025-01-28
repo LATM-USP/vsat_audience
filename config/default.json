@@ -1,0 +1,20 @@
+{
+  "app": {
+    "name": "vsat"
+  },
+  "server": {
+    "port": 3000
+  },
+  "log": {
+    "level": "debug"
+  },
+  "database": {
+    "log": {
+      "query": false,
+      "error": false
+    }
+  },
+  "authentication": {
+    "pathsRequiringAuthentication": ["/api/*", "/author/*"]
+  }
+}

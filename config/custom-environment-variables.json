@@ -1,0 +1,14 @@
+{
+  "database": {
+    "connectionString": "DATABASE_URL"
+  },
+  "cloudinary": {
+    "url": "CLOUDINARY_URL"
+  },
+  "authentication": {
+    "magic": {
+      "secretKey": "MAGIC_SECRET_KEY",
+      "publicKey": "MAGIC_PUBLISHABLE_KEY"
+    }
+  }
+}

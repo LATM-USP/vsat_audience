@@ -1,0 +1,36 @@
+---
+import ErrorBoundaryFallback from "@components/error/ErrorBoundaryFallback.astro";
+import EditStory from "@components/story/edit/EditStory";
+import toStoryId from "@domain/story/toStoryId";
+import Layout from "@layouts/AuthoringLayout.astro";
+
+const { repositoryStory, i18n } = Astro.locals.environment<
+  App.WithStoryRepository & App.WithI18N
+>();
+
+const storyId = toStoryId(Astro.params.storyId);
+
+if (!storyId) {
+  return Astro.redirect("/author/story?err=345");
+}
+
+const story = await repositoryStory.getStory({ id: storyId });
+
+if (!story) {
+  return Astro.redirect("/author/story?err=346");
+}
+
+const translations = i18n.getTranslationsForPage({
+  locale: Astro.preferredLocale,
+  page: "story",
+});
+---
+
+<Layout
+  title={i18n.t("page.story.meta.title")}
+  description={i18n.t("page.story.meta.description")}
+>
+  <EditStory story={story} translations={translations} client:only="react">
+    <ErrorBoundaryFallback />
+  </EditStory>
+</Layout>

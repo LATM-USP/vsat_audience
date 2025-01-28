@@ -1,0 +1,23 @@
+---
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="/styles/site-public.css" />
+    <meta name="description" content={description ?? "VSAT"} />
+    <title>{title ?? "VSAT"}</title>
+    <slot name="scripts" />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

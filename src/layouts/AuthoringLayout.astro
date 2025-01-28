@@ -1,0 +1,30 @@
+---
+import "@fontsource/source-sans-pro";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+
+const { i18n } = Astro.locals.environment<App.WithI18N>();
+
+const language = i18n.hasSupportFor(Astro.preferredLocale)
+  ? Astro.preferredLocale
+  : "en";
+---
+
+<!doctype html>
+<html lang={language}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="/styles/site-authoring.css" />
+    <meta name="description" content={description ?? "VSAT"} />
+    <title>{title ?? "VSAT"}</title>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

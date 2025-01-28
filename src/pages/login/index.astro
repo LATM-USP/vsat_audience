@@ -1,0 +1,31 @@
+---
+import Login from "../../components/authentication/Login";
+import LoginInProgress from "../../components/authentication/LoginInProgress.astro";
+import Layout from "../../layouts/AuthoringLayout.astro";
+
+import "./_login.module.css";
+
+const { magic, i18n } = Astro.locals.environment<
+  App.WithMagicAuthenticationConfig & App.WithI18N
+>();
+
+const translations = i18n.getTranslationsForPage({
+  locale: Astro.preferredLocale,
+  page: "login",
+});
+---
+
+<Layout
+  title={i18n.t("page.login.meta.title")}
+  description={i18n.t("page.login.meta.description")}
+>
+  <main>
+    <Login
+      magicPublicKey={magic.publicKey}
+      translations={translations}
+      client:only="react"
+    >
+      <LoginInProgress />
+    </Login>
+  </main>
+</Layout>
