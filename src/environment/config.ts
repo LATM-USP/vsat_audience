@@ -60,19 +60,17 @@ const AuthenticationConfigModel = z.object({
 export type AuthenticationConfig = z.infer<typeof AuthenticationConfigModel>;
 
 const CloudinaryConfigModel = z.object({
-  url: z.string().min(5).url(),
+  url: z.string().url(),
 });
 
 export type CloudinaryConfig = z.infer<typeof CloudinaryConfigModel>;
 
+// https://kysely.dev/docs/recipes/logging#2-provide-a-custom-logging-function
 const DatabaseLogConfigModel = z.object({
   query: z.boolean().default(false),
   error: z.boolean().default(false),
 });
 
-/**
- * @see https://kysely.dev/docs/recipes/logging#2-provide-a-custom-logging-function
- */
 export type DatabaseLogConfig = z.infer<typeof DatabaseLogConfigModel>;
 
 export const DatabaseConfigModel = z.object({

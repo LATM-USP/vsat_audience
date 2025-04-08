@@ -1,7 +1,7 @@
 You can stand up the entire stack for VSAT like so:
 
 ```shell
-docker compose -f docker-compose.vsat.yml up
+docker compose up
 ```
 
 This'll stand up:
