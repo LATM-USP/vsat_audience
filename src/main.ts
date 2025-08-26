@@ -4,7 +4,7 @@ createApp()
   .then(([startServer, log]) =>
     startServer()
       .then(({ config }) => {
-        log.info("Server listening on port %s", config.port);
+        log.info("Server listening on port %d", config.port);
       })
       .catch((err) => {
         log.error({ err }, "Error starting server");
