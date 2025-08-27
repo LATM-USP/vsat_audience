@@ -19,10 +19,12 @@ export default function logoutRoute(log: Logger): Router {
 
         req.session.destroy((errSession) => {
           if (errSession) {
-            log.warn({ err: errSession, user: req.user, req },
-              "Error destroying HTTP session on logout");
+            log.warn(
+              { err: errSession, user: req.user, req },
+              "Error destroying HTTP session on logout",
+            );
           }
-        })
+        });
 
         log.info({ user: req.user, req }, "User successfully logged out");
 

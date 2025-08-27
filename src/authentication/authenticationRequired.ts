@@ -42,7 +42,7 @@ export default function authenticationRequired(
 type RequiresAuthentication = (path: string) => boolean;
 
 export function requiresAuthentication(
-  paths: AuthenticationConfig["pathsRequiringAuthentication"]
+  paths: AuthenticationConfig["pathsRequiringAuthentication"],
 ): RequiresAuthentication {
   const patterns = paths.map((path) => new URLPattern({ pathname: path }));
 
