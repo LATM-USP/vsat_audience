@@ -5,7 +5,18 @@ You'll need:
 
 > You'll also need to ask
 > [someone on the team](https://github.com/BrookesUniversityLearningResources/vsat/graphs/contributors)
-> for access to the `vsat` app on Heroku.
+> for access to the `vsatool` app on Heroku.
+
+## One Time Setup
+
+You'll need to
+[add the Heroku remote](https://devcenter.heroku.com/articles/git#for-an-existing-app):
+
+```shell
+$ heroku git:remote -a vsatool
+```
+
+> You just need to do this once — per unique clone of the VSAT repository — and can skip this step in future.
 
 ## Process
 
@@ -19,6 +30,6 @@ $ git push heroku main
 
 ## Useful Links
 
-- The [dashboard](https://dashboard.heroku.com/apps/vsat)
-- The [settings](https://dashboard.heroku.com/apps/vsat/settings)
-- The [logs](https://dashboard.heroku.com/apps/vsat/logs)
+- The [dashboard](https://dashboard.heroku.com/apps/vsatool)
+- The [settings](https://dashboard.heroku.com/apps/vsatool/settings)
+- The [logs](https://dashboard.heroku.com/apps/vsatool/logs)

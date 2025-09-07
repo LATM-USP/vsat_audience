@@ -4,6 +4,12 @@ Create a file `.env` at the root of the project:
 touch .env
 ```
 
+> ⚠️ Do not add this file to Git because it contains values that should not be
+> shared publicly.
+>
+> Note that this file is explicitly ignored by Git in
+> [the `.gitignore` file](./gitignore).
+
 Populate it with the following environment variables:
 
 ```
