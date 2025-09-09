@@ -1,6 +1,6 @@
 import i18n from "i18next";
 import pg from "pg";
-import { pino } from "pino";
+import pino from "pino";
 
 import createKysely from "../database/createKysely.js";
 import type { Database } from "../database/schema.js";

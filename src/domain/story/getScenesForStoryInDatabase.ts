@@ -35,7 +35,7 @@ function getScenesForStoryInDatabase(
       .execute();
 
     if (!isNonEmptyArray(rows)) {
-      log.debug({ storyId }, 'No scenes found for story with ID "%s"', storyId);
+      log.debug({ storyId }, 'No scenes found for story with ID "%d"', storyId);
 
       return [];
     }

@@ -8,7 +8,7 @@ Note that you'll need some:
 ```shell
 $ git clone https://github.com/BrookesUniversityLearningResources/vsat.git
 $ cd vsat
-$ nvm use 22
+$ nvm use 24
 $ npm install
 $ docker compose up --detach db
 $ npm run dev

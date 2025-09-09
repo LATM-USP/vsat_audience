@@ -1,5 +1,4 @@
 import type { RequestHandler } from "express";
-import micromatch from "micromatch";
 import type { Logger } from "pino";
 
 import type { AuthenticationConfig } from "../environment/config.js";
@@ -7,15 +6,17 @@ import type { AuthenticationConfig } from "../environment/config.js";
 /**
  * Build (Express) middleware that guards paths requiring an authenticated user.
  */
-function authenticationRequired(
+export default function authenticationRequired(
   log: Logger,
-  pathsRequiringAuthentication: AuthenticationConfig["pathsRequiringAuthentication"],
+  paths: AuthenticationConfig["pathsRequiringAuthentication"],
 ): RequestHandler {
-  if (pathsRequiringAuthentication.length === 0) {
+  if (paths.length === 0) {
     log.warn("No paths require authentication: do you need this middleware?");
 
     return (_req, _res, next) => next();
   }
+
+  const requiresAuth = requiresAuthentication(paths);
 
   return (req, res, next) => {
     const path = req.path;
@@ -26,7 +27,7 @@ function authenticationRequired(
       return next();
     }
 
-    if (micromatch.isMatch(path, pathsRequiringAuthentication)) {
+    if (requiresAuth(path)) {
       log.trace({ path }, "Request requires authenticated user");
 
       return res.redirect("/login");
@@ -38,4 +39,12 @@ function authenticationRequired(
   };
 }
 
-export default authenticationRequired;
+type RequiresAuthentication = (path: string) => boolean;
+
+export function requiresAuthentication(
+  paths: AuthenticationConfig["pathsRequiringAuthentication"],
+): RequiresAuthentication {
+  const patterns = paths.map((path) => new URLPattern({ pathname: path }));
+
+  return (path) => !!patterns.find((pattern) => pattern.test(path));
+}

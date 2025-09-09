@@ -18,7 +18,7 @@ function httpSessionMiddleware(config: ServerConfig["session"], pool: Pool) {
     saveUninitialized: false,
     resave: false,
     unset: "destroy",
-    cookie: { maxAge: 30 /* days */ * 24 * 60 * 60 * 1000 },
+    cookie: { maxAge: 1 /* days */ * 24 * 60 * 60 * 1000 },
   });
 }
 
