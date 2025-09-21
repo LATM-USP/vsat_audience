@@ -13,8 +13,8 @@ if (!user?.id) {
   return Astro.redirect("/login");
 }
 
-const { repositoryStory, i18n, log } = Astro.locals.environment<
-  App.WithStoryRepository & App.WithI18N & App.WithLog
+const { repositoryStory, i18n } = Astro.locals.environment<
+  App.WithStoryRepository & App.WithI18N
 >();
 
 let stories = await repositoryStory.getStorySummariesByAuthor(user.id);
