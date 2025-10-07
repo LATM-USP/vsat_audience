@@ -36,8 +36,8 @@ To his right are shelves of books.
 
 To his left he sees Lucy, his colleague.
 
-* [Mark's eye is caught by a book](thebookshelves)
-* [Chat with Lucy](the erudite colleague)
+[Mark's eye is caught by a book](thebookshelves)
+[Chat with Lucy](the erudite colleague)
 
 # The Accursed Book|thebookshelves
 

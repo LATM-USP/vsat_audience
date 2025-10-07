@@ -1,3 +1,21 @@
+## Main
+
+This is [a web application (an HTTP server)](./architecture.md) so everything
+starts at [main.ts](/src/main.ts).
+
+This file delegates responsibility for defining all the routes -- pages and API
+endpoints -- to [createApp.ts](/src/createApp.ts) and then it starts the
+(Express) server.
+
+* You might also want to check out [createServer.ts](/src/server/createServer.ts)
+which defines some useful (Express) middleware, one of which is the Astro
+integration for the pages.
+
+These various routes and middleware all pull various services and repositories
+from the environment which is this app's
+[composition root](/src/environment/getEnvironment.ts) where everything is
+plugged together.
+
 # The Astro Stuff
 
 Astro is responsible for the client-facing pages.
@@ -15,7 +33,7 @@ const { i18n } = Astro.locals.environment<App.WithI18N>();
 environment is plugged together:
 * The database (pool)
 * Internationalization (I18N) support
-* Tranasactional services and repositories
+* Transactional services and repositories
 
 The environment is exposed to Astro [via this middleware](/src/middleware.ts).
 
