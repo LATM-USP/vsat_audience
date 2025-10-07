@@ -6,6 +6,8 @@ import { isNonEmptyArray } from "@util/nonEmptyArray";
 
 import Layout from "../../../layouts/AuthoringLayout.astro";
 
+import groupByPublicationStatus from "./_groupByPublicationStatus.js";
+
 const user = Astro.locals.user;
 if (!user?.id) {
   return Astro.redirect("/login");
@@ -32,6 +34,10 @@ const translations = i18n.getTranslationsForPage({
   page: "stories",
 });
 
+const [publishedStories, unpublishedStories] = groupByPublicationStatus(
+  stories.stories,
+);
+
 const thereIsAtLeastOneStory = isNonEmptyArray(stories.stories);
 ---
 
@@ -43,14 +49,36 @@ const thereIsAtLeastOneStory = isNonEmptyArray(stories.stories);
     <StoriesHeader
       author={stories.author}
       translations={translations}
-      showCreateStory={thereIsAtLeastOneStory}
+      showCreateStory={isNonEmptyArray(stories.stories)}
       client:only="react"
     />
+
+    {!thereIsAtLeastOneStory && <NoStories translations={translations} />}
+
     {
-      thereIsAtLeastOneStory ? (
-        <StorySummaryGrid stories={stories.stories} />
-      ) : (
-        <NoStories translations={translations} />
+      isNonEmptyArray(unpublishedStories) && (
+        <StorySummaryGrid stories={unpublishedStories}>
+          <h2 slot="header" class="header">
+            Unpublished stories
+          </h2>
+          <div slot="blurb" class="blurb">
+            These are the stories you're working on. Only you can see them.
+          </div>
+        </StorySummaryGrid>
+      )
+    }
+
+    {
+      isNonEmptyArray(publishedStories) && (
+        <StorySummaryGrid stories={publishedStories}>
+          <h2 slot="header" class="header">
+            Published stories
+          </h2>
+          <div slot="blurb" class="blurb">
+            These are all of your published stories. Anyone with the link to
+            your published story can read it.
+          </div>
+        </StorySummaryGrid>
       )
     }
   </main>
@@ -58,7 +86,16 @@ const thereIsAtLeastOneStory = isNonEmptyArray(stories.stories);
 
 <style>
   main {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
     margin: 2rem auto;
     width: 1000px;
+  }
+
+  .header,
+  .blurb {
+    color: var(--color-text);
   }
 </style>
