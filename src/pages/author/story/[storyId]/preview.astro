@@ -68,3 +68,21 @@ const publishedStory = {
 <body>
   <PublishedStory story={publishedStory} />
 </body>
+
+\<script>
+
+  AFRAME.registerComponent('rotation-reader', {
+  init: function () {
+
+    window.addEventListener('click', () => {
+      const rotation = this.el.object3D.rotation;
+      // const position = this.el.object3D.position;
+
+      console.log('Rotação:', rotation);
+      // console.log('Posição:', position);
+    });
+  }
+});
+
+    
+</script>
