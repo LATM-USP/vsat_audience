@@ -12,6 +12,7 @@ const { story } = Astro.props;
 <script set:html={`window.current = { story: ${JSON.stringify(story)}}`} />
 
 <script>
+  import countLines from "@domain/story/publish/support/countLines";
   import {
     isHeadingBlock,
     isLinkBlock,
@@ -42,10 +43,11 @@ const { story } = Astro.props;
   const FICTION_Y = 5;
 
   /**
-   * How much the "bump" text forward from a background so that it can be read.
+   * How much to "bump" text forward off the background box so that it can be
+   * read.
    *
-   * If the text is flush with a background it introduces odd artifacts when
-   * moving around in the scene.
+   * If the text is flush with the background it introduces odd artifacts when
+   * moving around in the scene so we bump (lift) it a little.
    */
   const FICTION_TEXT_Z = 0.25;
 
@@ -58,7 +60,7 @@ const { story } = Astro.props;
         text: "white",
       },
       fiction: {
-        background: "#FBEEE6",
+        background: "#E0E0E0",
         text: "#2C3E50",
       },
       link: {
@@ -130,10 +132,13 @@ const { story } = Astro.props;
         removeAllChildNodes(fiction);
 
         const heading = (() => {
-          const text = current.page.content.find(isHeadingBlock)?.text;
+          const text = current.page.content.find(isHeadingBlock)?.text || "";
 
-          const entity = document.createElement("a-box");
-          entity.setAttribute("block-heading", `text: ${text}`);
+          const entity = document.createElement("a-entity");
+          entity.setAttribute(
+            "block-heading",
+            `text: ${text}; lineCount: ${countLines(text)}`,
+          );
 
           return entity;
         })();
@@ -144,7 +149,9 @@ const { story } = Astro.props;
             .map((block) => block.text)
             .join("\n\n");
 
-          const lineCount = countLines(text);
+          // we add one so that we always have at least 2 lines;
+          // this gives the fiction some room to breathe.
+          const lineCount = countLines(text) + 1;
 
           const entity = document.createElement("a-entity");
           entity.setAttribute(
@@ -183,42 +190,48 @@ const { story } = Astro.props;
     },
   });
 
-  function countLines(text: string): number {
-    const MAX_CHARS_PER_LINE = 50;
-
-    const wrappedLines = Math.max(
-      Math.trunc(text.length / MAX_CHARS_PER_LINE),
-      1,
-    );
-
-    const newlines = text.matchAll(/\n/g).toArray().length;
-
-    // we add one so that we always have at least 2 lines;
-    // this gives the text content some room to breathe.
-    return wrappedLines + newlines + 1;
-  }
-
   AFRAME.registerComponent("block-heading", {
     schema: {
       text: { type: "string", default: "" },
+      lineCount: { type: "number", default: "1" },
     },
     init: function () {
-      this.el.setAttribute("class", "clickable");
-      this.el.setAttribute("color", THEME.color.primary.background);
-      this.el.setAttribute("width", MAX_WIDTH + 1);
-      this.el.setAttribute("depth", FICTION_TEXT_Z);
-      this.el.setAttribute("opacity", OPACITY);
-      this.el.setAttribute("position", `0 ${FICTION_Y} 0`);
+      const y =
+        this.data.lineCount == 1
+          ? FICTION_Y
+          : FICTION_Y + this.data.lineCount * 0.125;
+      this.el.setAttribute("position", `0 ${y} 0`);
 
-      const theText = document.createElement("a-troika-text");
-      theText.setAttribute("value", this.data.text);
-      theText.setAttribute("font-size", "0.25");
-      theText.setAttribute("color", THEME.color.primary.text);
-      theText.setAttribute("max-width", MAX_WIDTH);
-      theText.setAttribute("anchor", "left");
-      theText.setAttribute("baseline", "top");
-      theText.setAttribute("position", `-${MAX_WIDTH / 2} 0 0.5`);
+      const theText = ((el) => {
+        el.setAttribute("value", this.data.text);
+        el.setAttribute("font-size", "0.25");
+        el.setAttribute("color", THEME.color.primary.text);
+        el.setAttribute("max-width", MAX_WIDTH);
+        el.setAttribute("anchor", "left");
+        el.setAttribute("baseline", "top");
 
+        const textY =
+          this.data.lineCount == 1 ? 0 : this.data.lineCount * 0.155;
+        el.setAttribute("position", `-${MAX_WIDTH / 2} ${textY} 0.5`);
+
+        return el;
+      })(document.createElement("a-troika-text"));
+
+      const theBackground = ((el) => {
+        el.setAttribute("class", "clickable");
+        el.setAttribute("color", THEME.color.primary.background);
+        el.setAttribute("width", MAX_WIDTH + 1);
+        el.setAttribute("depth", FICTION_TEXT_Z);
+        el.setAttribute("opacity", OPACITY);
+
+        const backgroundHeight =
+          this.data.lineCount == 1 ? 1 : 1 + this.data.lineCount * 0.25;
+        el.setAttribute("height", backgroundHeight);
+
+        return el;
+      })(document.createElement("a-box"));
+
+      this.el.appendChild(theBackground);
       this.el.appendChild(theText);
     },
   });
@@ -231,9 +244,6 @@ const { story } = Astro.props;
     init: function () {
       this.el.setAttribute("position", `0 ${FICTION_Y - 1} 0`);
 
-      const height =
-        this.data.lineCount == 1 ? 1 : 1 + this.data.lineCount * 0.25;
-
       const theText = ((el) => {
         el.setAttribute("value", this.data.text);
         el.setAttribute("color", THEME.color.fiction.text);
@@ -244,6 +254,9 @@ const { story } = Astro.props;
 
         return el;
       })(document.createElement("a-troika-text"));
+
+      const height =
+        this.data.lineCount == 1 ? 1 : 1 + this.data.lineCount * 0.25;
 
       const theBackground = ((el) => {
         el.setAttribute("position", `0 -3 0`);
