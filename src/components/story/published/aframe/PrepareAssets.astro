@@ -21,16 +21,22 @@ const { story, openingScene } = Astro.props;
         const audioId = `audio-${scene.audio!.id}`;
         if (scene.id === openingScene.id) {
           return (
-            <audio
+            <a-sound
               id={audioId}
               src={scene.audio!.url}
               autoplay="true"
+              loop="true"
+              position="0 0 1"
+              positional="true"
+              rolloffFactor="20"
+              volume="7"
+              refDistance="10"
               crossorigin="anonymous"
             />
           );
         }
         return (
-          <audio id={audioId} src={scene.audio!.url} crossorigin="anonymous" />
+          <a-sound id={audioId} src={scene.audio!.url} crossorigin="anonymous" />
         );
       })
   }
