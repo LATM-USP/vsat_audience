@@ -1,0 +1,32 @@
+#N canvas 377 202 685 455 12;
+#X obj 156 185 audce_L4_amb_rot~ 1;
+#X obj 144 129 inlet~;
+#X obj 201 129 inlet~;
+#X obj 257 129 inlet~;
+#X obj 314 129 inlet~;
+#X obj 74 130 inlet;
+#X obj 71 307 outlet~;
+#X obj 138 307 outlet~;
+#X text 380 119 Entradas: mensagem no formato 'ori_rcv X Y Z' e sinais
+de audio W \, X \, Y e Z, f 32;
+#X text 298 210 Saída: sinais de audio W' \, X' \, Y' e Z' (rotacionados)
+, f 40;
+#X obj 143 249 audce_L4_amb_3rd~ 1 1;
+#X text 80 334 Left;
+#X text 140 337 Right;
+#X obj 235 305 dac~ 1 2;
+#X text 297 274 Saída estéreo pronta para escuta em fone (L e R)
+;
+#X connect 0 0 10 0;
+#X connect 0 1 10 1;
+#X connect 0 2 10 2;
+#X connect 0 3 10 3;
+#X connect 1 0 0 0;
+#X connect 2 0 0 1;
+#X connect 3 0 0 2;
+#X connect 4 0 0 3;
+#X connect 5 0 0 0;
+#X connect 10 0 6 0;
+#X connect 10 0 13 0;
+#X connect 10 1 7 0;
+#X connect 10 1 13 1;
