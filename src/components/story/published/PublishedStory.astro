@@ -18,9 +18,13 @@ const openingScene = openingSceneFor(story);
 
   AFRAME.registerComponent('rotation-reader', {
   init: function () {
-
     window.addEventListener('click', () => {
-      const rotation = this.el.object3D.rotation;
+      //const rotation = this.el.object3D.rotation;
+      const rotation = this.el.getAttribute('rotation');
+      //const rotx = this.el.getAttribute('rotation').x;
+      //const roty = this.el.getAttribute('rotation').y;
+      //const rotz = this.el.getAttribute('rotation').z;
+
       // const position = this.el.object3D.position;
 
       console.log('Rotação:', rotation);
@@ -28,8 +32,6 @@ const openingScene = openingSceneFor(story);
     });
   }
 });
-
-    
 </script>
 
 <PrepareStory story={story} />
