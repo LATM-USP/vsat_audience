@@ -1,0 +1,41 @@
+#N canvas 266 99 950 596 12;
+#X obj 36 266 audce_L4_amb_rot~ 1;
+#X obj 36 324 audce_L4_amb_3rd~ 1 1;
+#X text 24 431 Left;
+#X text 72 431 Right;
+#X obj 36 401 dac~ 1 2;
+#X text 148 365 Saída estéreo pronta para escuta em fone (L e R)
+;
+#X obj 36 29 r ori_rcv;
+#X obj 409 456 print audce;
+#X text 500 448 p/ debugging: manda p/ console, f 25;
+#X obj 101 101 audce_L4_objplay5~ snd1;
+#X text 382 142 receive NewPathTosnd1 (recebe nome arquivo ambisonic
+/path/sound.wav), f 70;
+#X text 382 162 receive pplaysnd1 (recebe bang p/ play);
+#X text 381 182 receive ppausesnd1 (recebe bang p/ pause);
+#X text 381 201 receive sstopsnd1 (recebe bang p/ stop);
+#X text 187 294 Saídas: sinais de audio W' \, X' \, Y' e Z' (rotacionados)
+, f 57;
+#X text 115 29 Entrada: recebe mensagem no formato 'ori_rcv X Y Z'
+, f 53;
+#X text 371 97 Entrada: patch snd1 tocador ao lado recebe diretamente
+comandos p/ abrir arquivo \, play \, pause e stop:;
+#X text 99 74 player (audce_L4_objplay5~ snd1);
+#X text 187 268 ROTACIONADOR;
+#X text 193 326 DECODIFICADOR (ambisonic -> stereo);
+#X text 109 401 saída de audio para pd4web repassar;
+#X text 504 503 Saida: devolve metadados para vsat (browser), f 26
+;
+#X obj 411 508 s audceback;
+#X connect 0 0 1 0;
+#X connect 0 1 1 1;
+#X connect 0 2 1 2;
+#X connect 0 3 1 3;
+#X connect 1 0 4 0;
+#X connect 1 1 4 1;
+#X connect 6 0 0 0;
+#X connect 9 0 0 0;
+#X connect 9 1 0 1;
+#X connect 9 2 0 2;
+#X connect 9 3 0 3;
