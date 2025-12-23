@@ -30,6 +30,9 @@ const { story } = Astro.props;
   import { EVENT_LINK_ACTIVATED } from "./linkActivated";
   import type { Current } from "./types";
 
+  //import Pd4WebModule from "./audience_hold/pd4web.js";
+  //import "./audience/pd4web.threads.js";
+
   /**
    * The maximum width of the text (fiction) content.
    */
@@ -45,7 +48,6 @@ const { story } = Astro.props;
    * The `y` value for each of the above is relative to this value.
    */
   const FICTION_Y = 5;
-
   /**
    * How much to "bump" text forward off the background box so that it can be
    * read.
@@ -74,6 +76,57 @@ const { story } = Astro.props;
       },
     },
   });
+
+  // audience audio setup
+  async function loadPd4WebFactory(): Promise<any|null> {
+    if (typeof window === "undefined") return null;
+    try {
+      const mod: any = await import("./audience/pd4web.js"); // public/asset path
+      return mod.Pd4WebModule ?? mod.default ?? mod;
+    } catch {
+      if ((window as any).Pd4WebModule) return (window as any).Pd4WebModule;
+      await new Promise<void>((resolve, reject) => {
+        const s = document.createElement("script");
+        s.src = "./audience/pd4web.js";
+        s.onload = () => resolve();
+        s.onerror = (e) => reject(e);
+        document.head.appendChild(s);
+      });
+      console.log("Pd4WebModule loaded from script tag");
+      return (window as any).Pd4WebModule ?? (window as any).Module ?? null;
+    }
+}
+  let Pd4Web: any = null;
+
+  const factory = await loadPd4WebFactory();
+
+  //if (!factory) return console.warn("Pd4Web factory not available");
+  const wasmModule = await factory(); // factory() may return a promise
+  //if (!wasmModule.Pd4Web) return console.warn("Pd4Web constructor not found");
+  Pd4Web = new wasmModule.Pd4Web();
+  if(Pd4Web) console.log("Pd4Web instance created");
+  else console.log("Pd4Web instance not created");
+  Pd4Web.openPatch("./audiece/index.pd", { renderGui: false });
+
+  /*
+  Pd4WebModule().then((Pd4WebModulePromise: any) => {
+  Pd4Web = new Pd4WebModulePromise.Pd4Web();
+  Pd4Web.openPatch("./audiece/index.pd", { renderGui: false });*/
+
+    document.addEventListener("click",() => {
+        Pd4Web.init();
+        console.log("Pd4Web initialized on user interaction");
+        setTimeout(() => {
+          //Pd4Web.sendSymbol("NewPathTosnd1", current.scene.audio.id);
+          //Pd4Web.sendBang("pplaysnd1");
+        }, 1000);
+      }, { once: true },
+    );
+
+    //Pd4Web.onBangReceived("ended", (r) => {
+    // logica aframe para tocar denovo
+    //  Pd4Web.sendBang("pplaysnd1");
+    //});
 
   AFRAME.registerComponent("story", {
     init: function () {
@@ -125,7 +178,11 @@ const { story } = Astro.props;
       if (current.scene.audio) {
         this.el.setAttribute(
           "sound",
-          `src: #audio-${current.scene.audio.id}; autoplay: false; positional: false`,
+          `src: #audio-${current.scene.audio.id}; 
+          autoplay: true; 
+          volume: 7;
+          loop: true;
+          positional: false`,
         );
       } else {
         this.el.removeAttribute("sound");
@@ -192,6 +249,21 @@ const { story } = Astro.props;
         fiction.appendChild(heading);
       }
     },
+  });
+
+  AFRAME.registerComponent('rotation-reader', {
+    init: function () {
+      window.addEventListener('click', () => {
+        const rotation = (this.el.object3D.rotation);
+        console.log('Rotação atual:', rotation);
+        if (Pd4Web) {
+        // default do aframe e 10x10x10 (metros)
+        // room metros
+          Pd4Web.sendList("ori_rcv", [rotation.x, rotation.y, rotation.z]);
+          console.log('Enviando rotação para Pd4Web:'); 
+        }
+      });
+    }
   });
 
   AFRAME.registerComponent("block-heading", {
