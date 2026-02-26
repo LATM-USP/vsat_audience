@@ -23,10 +23,10 @@ const openingScene = openingSceneFor(story);
 
   <a-camera position="0 0 1">
     <a-entity
+      cursor
       position="0 0 -3"
       geometry="primitive: ring; radiusInner: 0.05; radiusOuter: 0.1"
-      material="color: gray; shader: flat"
-      cursor="maxDistance: 30"></a-entity>
+      material="color: gray; shader: flat"></a-entity>
   </a-camera>
 
   <a-entity laser-controls raycaster="objects: [data-raycastable]"></a-entity>
