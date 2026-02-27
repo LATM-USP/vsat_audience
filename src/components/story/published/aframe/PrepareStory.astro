@@ -361,10 +361,7 @@ const serializedStory = DOMPurify.sanitize(
     init: function () {
       const theHeading = (() => {
         const el = document.createElement("a-entity");
-        el.setAttribute(
-          "block-heading",
-          `text: ${this.data.title}; fontSize: 0.35;`,
-        );
+        el.setAttribute("block-heading", `text: ${this.data.title}`);
         return el;
       })();
 
