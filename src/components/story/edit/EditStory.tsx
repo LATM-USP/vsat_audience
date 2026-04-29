@@ -24,6 +24,7 @@ import {
   isNonEmptyArray,
 } from "../../../util/nonEmptyArray.js";
 import htmlIdForStory from "../htmlIdForStory.js";
+import StoryOverview from "../overview/StoryOverview.js";
 import {
   ClientContext,
   type WithCreateScene,
@@ -112,6 +113,14 @@ const StoryEditor: FC<StoryEditorProps> = ({ story: initialStory }) => {
         break;
       }
 
+      case "sceneTitleChanged":
+      case "contentChanged":
+      case "imageChanged":
+      case "audioChanged": {
+        refetchStory();
+        break;
+      }
+
       default: {
         // do nothing
       }
@@ -154,10 +163,16 @@ const StoryEditor: FC<StoryEditorProps> = ({ story: initialStory }) => {
         story={story}
         onSceneChanged={onSceneChanged}
         onStoryChanged={onStoryChanged}
-      />
+      >
+        <StoryOverview
+          story={story}
+          onSceneSelected={(sceneId) => scrollTo(htmlIdForScene(sceneId))}
+        />
+      </StoryHeader>
+
       {isNonEmptyArray(story.scenes) ? (
         <Scenes
-          storyId={story.id}
+          story={story}
           scenes={story.scenes}
           onSceneChanged={onSceneChanged}
         />
@@ -169,19 +184,19 @@ const StoryEditor: FC<StoryEditorProps> = ({ story: initialStory }) => {
 };
 
 type ScenesProps = {
-  storyId: PersistentStory["id"];
+  story: PersistentStory;
   scenes: NonEmptyArray<PersistentScene>;
   onSceneChanged: OnSceneChanged;
 };
 
-const Scenes: FC<ScenesProps> = ({ storyId, scenes, onSceneChanged }) => {
+const Scenes: FC<ScenesProps> = ({ story, scenes, onSceneChanged }) => {
   return (
     <div className="scenes">
       {scenes.map((scene) => (
         <Scene
+          story={story}
           scene={scene}
           key={scene.id}
-          storyId={storyId}
           onSceneChanged={onSceneChanged}
         />
       ))}

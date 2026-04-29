@@ -1,12 +1,32 @@
 .header {
+  background-color: var(--color-bg);
   color: var(--color-text);
   display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  border-bottom: 1px dashed var(--color-text);
+}
+
+.contentMain {
+  display: flex;
+  flex-direction: column;
+}
+
+.contentMain div:first-child {
+  display: flex;
+  flex-direction: row;
   justify-content: space-between;
+
+  a {
+    color: var(--color-text);
+  }
 }
 
 .actionBar {
   display: flex;
-  align-items: center;
+  justify-content: space-between;
   gap: 1rem;
 
   a,
@@ -19,14 +39,38 @@
   }
 }
 
-div:has(.actionBar) {
+.linkPublished {
   display: flex;
-  gap: 1rem;
-  align-items: center;
+  gap: 0.5rem;
+  justify-content: unset;
 
   a {
-    color: var(--color-text);
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    margin-left: 0.5rem;
   }
+
+  button {
+    background-color: var(--color-bg);
+    border: none;
+    cursor: pointer;
+  }
+
+  button:hover {
+    transform: scale(1.2);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    button:hover {
+      transform: none;
+    }
+  }
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
 }
 
 .toolbar {

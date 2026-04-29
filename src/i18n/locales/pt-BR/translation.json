@@ -17,7 +17,7 @@
       },
       "message": {
         "heading": "Check your email",
-        "description": "Complete your log in using the magic link we just sent."
+        "description": "Complete your login using the magic link we just sent."
       },
       "error": "There's been an error"
     },
@@ -51,6 +51,9 @@
       "summary": {
         "image": {
           "alt-text": "Background image for '{{title}}'"
+        },
+        "action": {
+          "view-published-story": "View published story"
         }
       },
       "notify": {
@@ -85,6 +88,22 @@
           "save-title": "Save"
         }
       },
+      "overview": {
+        "unavailable": {
+          "no-reason": "Unable to render the story overview yet 🥲",
+          "with-reason": "Unable to render the story overview yet 🥲 \"{{reason}}\""
+        },
+        "heading": "Overview",
+        "label": "Story flow overview",
+        "link": {
+          "missing": {
+            "title": "Missing: {{link}}"
+          },
+          "navigate-to": {
+            "label": "Jump to {{link}}"
+          }
+        }
+      },
       "action": {
         "publish-story": {
           "label": "Publish story"
@@ -109,6 +128,12 @@
         },
         "back-to-my-stories": {
           "label": "My stories"
+        },
+        "view-published-story": {
+          "label": "Published story URL",
+          "copy": {
+            "label": "Copy published story URL"
+          }
         }
       },
       "scene": {
@@ -198,6 +223,11 @@
                 "headline": "The link is malformed",
                 "howtofix": "Add some text and a name to fix this link.",
                 "example": "[Unlock the chest](unlock-chest)"
+              },
+              "29": {
+                "headline": "The link name is not unique",
+                "howtofix": "Edit the link's name to be unique.",
+                "example": "# Exit | exit-the-building-unique-001"
               }
             }
           }
@@ -224,12 +254,16 @@
             "18": "We can't find that story so we can't unpublish it.",
             "19": "That story isn't quite ready for publishing yet.",
             "20": "Oops, we had an issue saving that name.",
-            "21": "You must login to access that part of the site."
+            "21": "You must login to access that part of the site.",
+            "27": "The audio file is too big to upload.",
+            "28": "The image file is too big to upload.",
+            "29": "Link names must be unique."
           }
         },
         "story": {
           "published": "Story published",
-          "unpublished": "Story unpublished"
+          "unpublished": "Story unpublished",
+          "published-url-copied": "Story URL copied"
         }
       }
     },

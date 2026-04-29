@@ -27,13 +27,13 @@ export type SceneTitleChangeEvent = {
 };
 
 export type SceneProps = {
+  story: PersistentStory;
   scene: PersistentScene;
-  storyId: PersistentStory["id"];
   onSceneChanged: OnSceneChanged;
 };
 
 const Scene: FC<SceneProps> = ({
-  storyId,
+  story,
   scene: initialScene,
   onSceneChanged,
 }) => {
@@ -46,7 +46,7 @@ const Scene: FC<SceneProps> = ({
     queryKey: [`scene-${initialScene.id}`],
     initialData: initialScene,
     queryFn: () =>
-      getScene(storyId, initialScene.id).then((result) => {
+      getScene(story.id, initialScene.id).then((result) => {
         switch (result.kind) {
           case "gotScene":
             return result.scene;
@@ -63,8 +63,8 @@ const Scene: FC<SceneProps> = ({
     Error,
     SceneTitleChanged
   >({
-    mutationFn: ({ title }) =>
-      saveSceneTitle(storyId, scene.id, title).then((result) => {
+    mutationFn: ({ title, sceneId }) =>
+      saveSceneTitle(story.id, sceneId, title).then((result) => {
         switch (result.kind) {
           case "sceneTitleSaved":
             return result.scene;
@@ -75,8 +75,13 @@ const Scene: FC<SceneProps> = ({
         }
       }),
     onError: feedback.notify.error,
-    onSuccess: () => {
+    onSuccess: (_, variables) => {
       refetch();
+      onSceneChanged({
+        kind: "sceneTitleChanged",
+        sceneId: variables.sceneId,
+        title: variables.title,
+      });
     },
   });
 
@@ -88,6 +93,14 @@ const Scene: FC<SceneProps> = ({
       }
 
       case "sceneDeleted": {
+        onSceneChanged(e);
+        break;
+      }
+
+      case "contentChanged":
+      case "imageChanged":
+      case "audioChanged": {
+        refetch();
         onSceneChanged(e);
         break;
       }
@@ -108,6 +121,7 @@ const Scene: FC<SceneProps> = ({
         onTitleChanged={(title) => {
           internalOnSceneChanged({
             kind: "sceneTitleChanged",
+            sceneId: scene.id,
             title,
           });
         }}
@@ -117,17 +131,17 @@ const Scene: FC<SceneProps> = ({
         <div className={styles.sceneMedia}>
           <SceneImage
             scene={scene}
-            storyId={storyId}
+            storyId={story.id}
             onSceneChanged={internalOnSceneChanged}
           />
           <SceneAudio
             scene={scene}
-            storyId={storyId}
+            storyId={story.id}
             onSceneChanged={internalOnSceneChanged}
           />
         </div>
         <SceneFiction
-          storyId={storyId}
+          story={story}
           scene={scene}
           onSceneChanged={internalOnSceneChanged}
         />

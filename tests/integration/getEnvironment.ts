@@ -30,7 +30,7 @@ export async function getEnvironment(
   );
 
   const { error } = await runMigrations(db, () =>
-    path.resolve(cwd(), "dist/build/database/migrate/migrations"),
+    path.resolve(cwd(), "dist/build/src/database/migrate/migrations"),
   );
 
   if (error) {

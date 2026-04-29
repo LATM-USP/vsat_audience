@@ -16,6 +16,9 @@ import { ErrorCodedError } from "@domain/error/ErrorCodedError";
 import type { PersistentScene, PersistentStory } from "@domain/index";
 import unsupported from "@domain/story/client/unsupportedResult";
 import parse from "@domain/story/publish/parse/parse";
+import deriveLinkTarget, {
+  deriveLinkTargetLeniently,
+} from "@domain/story/publish/support/deriveLinkTarget";
 import debounce from "@util/function/debounce";
 
 import {
@@ -27,18 +30,20 @@ import {
 import type { OnSceneChanged } from "../types";
 import Block from "./block/Block";
 import getContent from "./getContent";
-import styles from "./SceneFiction.module.css";
 import Toolbar from "./Toolbar";
 import toSlateModel, { emptyBlock } from "./toSlateModel";
 
+import styles from "./SceneFiction.module.css";
+import type { LinkTarget } from "@domain/story/publish/types";
+
 type SceneFictionProps = {
-  storyId: PersistentStory["id"];
+  story: PersistentStory;
   scene: PersistentScene;
   onSceneChanged: OnSceneChanged;
 };
 
 const SceneFiction: FC<SceneFictionProps> = ({
-  storyId,
+  story,
   scene,
   onSceneChanged,
 }) => {
@@ -54,7 +59,7 @@ const SceneFiction: FC<SceneFictionProps> = ({
 
   const saveTheSceneContent = useMutation<string, Error, string>({
     mutationFn: (content) =>
-      saveSceneContent({ storyId, sceneId: scene.id, content }).then(
+      saveSceneContent({ storyId: story.id, sceneId: scene.id, content }).then(
         (result) => {
           switch (result.kind) {
             case "sceneContentSaved": {
@@ -93,7 +98,7 @@ const SceneFiction: FC<SceneFictionProps> = ({
 
   const deleteTheScene = useMutation<unknown, Error, PersistentScene["id"]>({
     mutationFn: (sceneId) =>
-      deleteScene({ storyId, sceneId }).then((result) => {
+      deleteScene({ storyId: story.id, sceneId }).then((result) => {
         switch (result.kind) {
           case "sceneDeleted":
             return;
@@ -128,39 +133,6 @@ const SceneFiction: FC<SceneFictionProps> = ({
       return next(editor);
     }
 
-    // grab the current line
-    const currentNode = Editor.node(editor, editor.selection, { depth: 1 });
-
-    // and grab that line's text
-    const text = Node.string(currentNode[0]).trim();
-
-    if (text.length > 0) {
-      // parse the line to see what kind of line it is
-      const result = parse(text, 1);
-
-      switch (result.kind) {
-        case "link": {
-          Transforms.setNodes(editor, { type: "blockLink" });
-          break;
-        }
-        case "headerNamed":
-        case "headerAnonymous": {
-          Transforms.setNodes(editor, { type: "blockHeading" });
-          break;
-        }
-        case "error": {
-          Transforms.setNodes(editor, {
-            type: "blockError",
-            error: {
-              code: result.errorCode || ErrorCodes.Error,
-              message: result.message,
-            },
-          });
-          break;
-        }
-      }
-    }
-
     if (e.key === "Enter") {
       e.preventDefault();
 
@@ -173,6 +145,73 @@ const SceneFiction: FC<SceneFictionProps> = ({
         distance: 1,
         unit: "word",
       });
+    }
+
+    return next(editor);
+  });
+
+  const onKeyUp: KeyboardEventHandler = debounce(() => {
+    if (!editor.selection) {
+      return next(editor);
+    }
+
+    // grab the current line
+    const currentNode = Editor.node(editor, editor.selection, { depth: 1 });
+
+    // and grab that line's text
+    const text = Node.string(currentNode[0]).trim();
+
+    if (text.length > 0) {
+      // parse the line to see what kind of line it is
+      const parseResult = parse(text, 1);
+
+      switch (parseResult.kind) {
+        case "link": {
+          Transforms.setNodes(editor, { type: "blockLink" });
+          break;
+        }
+        case "headerNamed":
+        case "headerAnonymous": {
+          const existingLinks = deriveExistingLinksFromEditor(editor);
+
+          const linkName = deriveLinkTargetLeniently(
+            parseResult.kind === "headerNamed"
+              ? parseResult.name
+              : deriveLinkTarget(parseResult),
+          );
+
+          if (existingLinks.has(linkName)) {
+            Transforms.setNodes(editor, {
+              type: "blockError",
+              error: {
+                code: ErrorCodes.LinkNamesMustBeUnique,
+                message: "Link names must be unique within a scene",
+              },
+            });
+          } else {
+            Transforms.setNodes(editor, { type: "blockHeading" });
+          }
+
+          break;
+        }
+        case "error": {
+          Transforms.setNodes(editor, {
+            type: "blockError",
+            error: {
+              code: parseResult.errorCode || ErrorCodes.Error,
+              message: parseResult.message,
+            },
+          });
+          break;
+        }
+
+        case "nothing":
+        case "emptyLine":
+        case "plaintext": {
+          // nothing to do for these cases
+          break;
+        }
+      }
     }
 
     return next(editor);
@@ -207,6 +246,7 @@ const SceneFiction: FC<SceneFictionProps> = ({
         </Toolbar>
         <Editable
           onKeyDown={onKeyDown}
+          onKeyUp={onKeyUp}
           className={styles.editor}
           renderElement={renderBlock}
           readOnly={saveTheSceneContent.isPending}
@@ -217,3 +257,28 @@ const SceneFiction: FC<SceneFictionProps> = ({
 };
 
 export default SceneFiction;
+
+function deriveExistingLinksFromEditor(editor: Editor): Set<LinkTarget> {
+  const currentPathIndex = editor.selection?.anchor.path[0];
+
+  const existingLinks = new Set<LinkTarget>();
+
+  for (const [node, path] of Node.nodes(editor)) {
+    if (path.length !== 1 || path[0] === currentPathIndex) {
+      continue;
+    }
+    const siblingText = Node.string(node).trim();
+    if (siblingText.length === 0) {
+      continue;
+    }
+
+    const sibling = parse(siblingText, 1);
+    if (sibling.kind === "headerNamed") {
+      existingLinks.add(deriveLinkTargetLeniently(sibling.name));
+    } else if (sibling.kind === "headerAnonymous") {
+      existingLinks.add(deriveLinkTargetLeniently(deriveLinkTarget(sibling)));
+    }
+  }
+
+  return existingLinks;
+}
