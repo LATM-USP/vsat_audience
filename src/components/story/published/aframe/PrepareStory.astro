@@ -169,7 +169,6 @@ const serializedStory = DOMPurify.sanitize(
         }
       }
 
-<<<<<<< HEAD
       const existingSound = this.el.components.sound;
       if (existingSound?.isPlaying) {
         existingSound.stopSound();
@@ -185,23 +184,6 @@ const serializedStory = DOMPurify.sanitize(
         );
       } else {
         this.el.removeAttribute("sound");
-=======
-      if (options.isSceneChange) {
-        const existingSound = this.el.components.sound;
-
-        if (existingSound?.isPlaying) {
-          existingSound.stopSound();
-        }
-
-        if (current.scene.audio) {
-          this.el.setAttribute(
-            "sound",
-            `src: #audio-${current.scene.audio.id}; autoplay: true; positional: false`,
-          );
-        } else {
-          this.el.removeAttribute("sound");
-        }
->>>>>>> upstream/main
       }
 
       const fiction = document.getElementById("fiction");
