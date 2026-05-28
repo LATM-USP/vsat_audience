@@ -1,0 +1,2 @@
+Para compilar o rotacionador, é necessário o acesso ao codigo fonte do AUDIENCE, e á versão atual do Pd4Web.
+Para acesso às funções do AUDIENCE, entre em contato com alguém responsável pelo repositório.
