@@ -35,3 +35,8 @@ pnpm-debug.log*
 
 # Claude stuff
 .claude/settings.local.json
+
+# Arquivos Audience
+
+src/pd4web/Libs
+src/pd4web/Pd4Web
