@@ -38,5 +38,5 @@ pnpm-debug.log*
 
 # Arquivos Audience
 
-src/rotacionador/Libs
-src/rotacionador/Pd4Web
+src/puredata/Libs
+src/puredata/Pd4Web
