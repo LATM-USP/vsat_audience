@@ -1,0 +1,56 @@
+#N canvas 25 83 544 413 10; 
+#X obj 58 76 inlet; 
+#X obj 138 76 inlet; 
+#X obj 219 76 inlet; 
+#X obj 404 76 inlet; 
+#X obj 58 103 * 100; 
+#X obj 138 103 * 10; 
+#X obj 268 216 *; 
+#X text 400 54 SR (sample rate); 
+#X text 315 258 value in samples; 
+#X obj 268 256 outlet; 
+#X obj -25 77 inlet; 
+#X text -25 54 mins; 
+#X obj -25 103 * 6000; 
+#X obj 405 32 samplerate~; 
+#X obj 405 2 loadbang; 
+#X text -27 28 SR can be updated any time through rightmost inlet. 
+; 
+#X text 135 53 dec.secs; 
+#X text 56 53 secs; 
+#X text 219 53 cent.secs; 
+#X obj 306 76 inlet; 
+#X text 306 53 mili.secs; 
+#X obj 404 108 / 1000; 
+#X text -26 291 Note: no.samples = SR x time (in millisecs) / 1000 
+; 
+#X obj 152 149 t b; 
+#X obj -25 183 expr ($f1*10) + ($f2*10) + ($f3*10) + ($f4*10) + $f5 
+; 
+#X text -29 234 -------------------------------------------------------- 
+; 
+#X text -27 220 total ammount in milliseconds; 
+#X text -26 -2 USAGE: Block converts time to a no. of samples. It receives 
+Pd samplerate (SR) at start.; 
+#X text -27 350 AUDIENCE/OA v.1.0.rel.250510.rgs. audce_aux_time2samples. 
+BSD and GPL applies. Copyright AUDIENCE Team \, 2010; 
+#X connect 0 0 4 0; 
+#X connect 1 0 5 0; 
+#X connect 2 0 24 3; 
+#X connect 2 0 23 0; 
+#X connect 3 0 21 0; 
+#X connect 4 0 24 1; 
+#X connect 4 0 23 0; 
+#X connect 5 0 24 2; 
+#X connect 5 0 23 0; 
+#X connect 6 0 9 0; 
+#X connect 10 0 12 0; 
+#X connect 12 0 24 0; 
+#X connect 12 0 23 0; 
+#X connect 13 0 21 0; 
+#X connect 14 0 13 0; 
+#X connect 19 0 24 4; 
+#X connect 19 0 23 0; 
+#X connect 21 0 6 1; 
+#X connect 23 0 24 0; 
+#X connect 24 0 6 0; 

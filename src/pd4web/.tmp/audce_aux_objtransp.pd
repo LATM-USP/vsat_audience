@@ -1,0 +1,80 @@
+#N canvas 199 22 625 756 10; 
+#X obj 101 101 cnv 15 229 38 empty empty empty 4 10 0 10 -262144 -4160 
+0; 
+#X obj -11 21 loadbang; 
+#X msg -11 79 \$1; 
+#X obj 238 117 bng 15 250 50 0 empty empty play -2 -7 0 8 -228856 -4160 
+-4160; 
+#X obj 178 117 bng 15 250 50 0 empty empty stop -2 -7 0 8 -228856 -4160 
+-4160; 
+#X obj 268 117 bng 15 250 50 0 empty empty >> 3 -7 0 8 -228856 -4160 
+-4160; 
+#X obj 147 117 bng 15 250 50 0 empty empty << 3 -7 0 8 -228856 -4160 
+-4160; 
+#X obj 207 117 bng 15 250 50 0 empty empty || 2 -7 0 8 -228856 -4160 
+-4160; 
+#X obj 103 22 inlet; 
+#X obj 103 44 route rew stop pause play ff; 
+#X text 18 357 Expected behavior:; 
+#X text 19 387 stop: stop machine and reset time_incrementer; 
+#X text 18 408 play: get time_holder \, convert to samples \, start 
+machine \, start time_incrementer; 
+#X text 18 444 pause: stops time_incrementer \, stop machine; 
+#X text 17 468 time_incrementer: send time to 0 if get resets \, increments 
+time_holder if gets start \, stops incrementing time_holder if gets 
+stop \,; 
+#X text 17 609 time_slider: it is exactly the time_holder \; changes 
+to slider changes time_holder; 
+#X text 18 642 time_display: it is exactly the time_holder: changes 
+to display changes time_holder; 
+#X text 17 566 time_holder: put current time (time) to the value it 
+receives \; time holder is in cents of seconds.; 
+#X msg 16 219 rew; 
+#X msg 74 218 reset; 
+#X msg 134 241 stop; 
+#X msg 298 239 run; 
+#X msg 477 219 ff; 
+#X text 367 217 Start playing!; 
+#X text 328 239 Start timer!; 
+#X text 205 217 Stop playing!; 
+#X text 166 241 Stop timer!; 
+#X text 17 516 ff: increments time_holder in steps of 10 dec.secs; 
+#X text 18 535 rew: decrements time_holder in steps of 10 dec.secs 
+; 
+#X obj -11 44 symbol \$1; 
+#X obj 145 218 s stop\$1; 
+#X obj 310 217 s play\$1; 
+#X obj -10 320 print Transport_created_for_Object; 
+#X text 296 15 USAGE: audce_aux_objtransp NAMEofOBJ; 
+#X obj 221 294 s \$1ObjTime; 
+#X text 2 707 AUDIENCE/OA v.1.0.rel.250510.rgs. audce_aux_objtransp. 
+BSD and GPL applies. Copyright AUDIENCE Team \, 2010; 
+#X obj 273 77 r playALL; 
+#X obj 101 76 r stopALL; 
+#X connect 1 0 19 0; 
+#X connect 1 0 29 0; 
+#X connect 2 0 32 0; 
+#X connect 3 0 21 0; 
+#X connect 3 0 31 0; 
+#X connect 4 0 20 0; 
+#X connect 4 0 19 0; 
+#X connect 4 0 30 0; 
+#X connect 5 0 22 0; 
+#X connect 6 0 18 0; 
+#X connect 7 0 20 0; 
+#X connect 7 0 30 0; 
+#X connect 8 0 9 0; 
+#X connect 9 0 6 0; 
+#X connect 9 1 4 0; 
+#X connect 9 2 7 0; 
+#X connect 9 3 3 0; 
+#X connect 9 4 5 0; 
+#X connect 18 0 34 0; 
+#X connect 19 0 34 0; 
+#X connect 20 0 34 0; 
+#X connect 21 0 34 0; 
+#X connect 22 0 34 0; 
+#X connect 29 0 2 0; 
+#X connect 36 0 3 0; 
+#X connect 37 0 4 0; 
+#X coords 0 -1 1 1 231 40 1 100 100; 

@@ -1,0 +1,11 @@
+prefix=/home/adiginton/.local/lib/python3.12/site-packages/pd4web/Pd4Web/emsdk/upstream/emscripten/cache/sysroot
+exec_prefix=/home/adiginton/.local/lib/python3.12/site-packages/pd4web/Pd4Web/emsdk/upstream/emscripten/cache/sysroot
+libdir=/home/adiginton/.local/lib/python3.12/site-packages/pd4web/Pd4Web/emsdk/upstream/emscripten/cache/sysroot/lib
+includedir=/home/adiginton/.local/lib/python3.12/site-packages/pd4web/Pd4Web/emsdk/upstream/emscripten/cache/sysroot/include
+
+Name: FFTW
+Description: fast Fourier transform library
+Version: 3.3.9
+Libs: -L${libdir} -lfftw3 
+Libs.private: -lm
+Cflags: -I${includedir}

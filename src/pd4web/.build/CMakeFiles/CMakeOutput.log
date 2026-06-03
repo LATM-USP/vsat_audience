@@ -1,0 +1,96 @@
+Determining size of float passed with the following output:
+Change Dir: '/home/adiginton/Documents/vsat_audience/src/pd4web/.build/CMakeFiles/CMakeTmp'
+
+Run Build Command(s): /home/adiginton/.local/lib/python3.12/site-packages/pd4web/Pd4Web/bin/ninja -v cmTC_d9174
+[1/2] /home/adiginton/.local/lib/python3.12/site-packages/pd4web/Pd4Web/emsdk/upstream/emscripten/emcc   -pthread -matomics -mbulk-memory -O3 -flto -pthread -matomics -mbulk-memory -msimd128 -MD -MT CMakeFiles/cmTC_d9174.dir/SIZEOF_FLOAT.c.o -MF CMakeFiles/cmTC_d9174.dir/SIZEOF_FLOAT.c.o.d -o CMakeFiles/cmTC_d9174.dir/SIZEOF_FLOAT.c.o -c /home/adiginton/Documents/vsat_audience/src/pd4web/.build/CMakeFiles/CheckTypeSize/SIZEOF_FLOAT.c
+[2/2] : && /home/adiginton/.local/lib/python3.12/site-packages/pd4web/Pd4Web/emsdk/upstream/emscripten/emcc -pthread -matomics -mbulk-memory -O3 -flto -pthread -matomics -mbulk-memory -msimd128 --preload-file "/home/adiginton/Documents/vsat_audience/src/pd4web/Pd4Web/Externals//pdlua/pd.lua@/pd.lua" --preload-file "/home/adiginton/Documents/vsat_audience/src/pd4web/Pd4Web/Externals//pdlua/pdlua/tutorial/examples/pdx.lua@/pdx.lua" --preload-file "/home/adiginton/Documents/vsat_audience/src/pd4web/Pd4Web/Externals//pdlua/InterRegular.ttf@/InterRegular.ttf" CMakeFiles/cmTC_d9174.dir/SIZEOF_FLOAT.c.o -o cmTC_d9174.js  -lm  --oformat=wasm  -sWASM=1 && :
+cache:INFO: generating system asset: sysroot/lib/wasm32-emscripten/lto/crt1.o... (this will be cached in "/home/adiginton/.local/lib/python3.12/site-packages/pd4web/Pd4Web/emsdk/upstream/emscripten/cache/sysroot/lib/wasm32-emscripten/lto/crt1.o" for subsequent builds)
+system_libs:INFO: compiled 1 inputs in 0.20s
+cache:INFO:  - ok
+cache:INFO: generating system library: sysroot/lib/wasm32-emscripten/lto/libstandalonewasm-nocatch.a... (this will be cached in "/home/adiginton/.local/lib/python3.12/site-packages/pd4web/Pd4Web/emsdk/upstream/emscripten/cache/sysroot/lib/wasm32-emscripten/lto/libstandalonewasm-nocatch.a" for subsequent builds)
+system_libs:INFO: compiled 14 inputs in 1.17s
+cache:INFO:  - ok
+
+
+
+Determining size of double passed with the following output:
+Change Dir: '/home/adiginton/Documents/vsat_audience/src/pd4web/.build/CMakeFiles/CMakeTmp'
+
+Run Build Command(s): /home/adiginton/.local/lib/python3.12/site-packages/pd4web/Pd4Web/bin/ninja -v cmTC_0b4bf
+[1/2] /home/adiginton/.local/lib/python3.12/site-packages/pd4web/Pd4Web/emsdk/upstream/emscripten/emcc   -pthread -matomics -mbulk-memory -O3 -flto -pthread -matomics -mbulk-memory -msimd128 -MD -MT CMakeFiles/cmTC_0b4bf.dir/SIZEOF_DOUBLE.c.o -MF CMakeFiles/cmTC_0b4bf.dir/SIZEOF_DOUBLE.c.o.d -o CMakeFiles/cmTC_0b4bf.dir/SIZEOF_DOUBLE.c.o -c /home/adiginton/Documents/vsat_audience/src/pd4web/.build/CMakeFiles/CheckTypeSize/SIZEOF_DOUBLE.c
+[2/2] : && /home/adiginton/.local/lib/python3.12/site-packages/pd4web/Pd4Web/emsdk/upstream/emscripten/emcc -pthread -matomics -mbulk-memory -O3 -flto -pthread -matomics -mbulk-memory -msimd128 --preload-file "/home/adiginton/Documents/vsat_audience/src/pd4web/Pd4Web/Externals//pdlua/pd.lua@/pd.lua" --preload-file "/home/adiginton/Documents/vsat_audience/src/pd4web/Pd4Web/Externals//pdlua/pdlua/tutorial/examples/pdx.lua@/pdx.lua" --preload-file "/home/adiginton/Documents/vsat_audience/src/pd4web/Pd4Web/Externals//pdlua/InterRegular.ttf@/InterRegular.ttf" CMakeFiles/cmTC_0b4bf.dir/SIZEOF_DOUBLE.c.o -o cmTC_0b4bf.js  -lm  --oformat=wasm  -sWASM=1 && :
+
+
+
+Determining size of int passed with the following output:
+Change Dir: '/home/adiginton/Documents/vsat_audience/src/pd4web/.build/CMakeFiles/CMakeTmp'
+
+Run Build Command(s): /home/adiginton/.local/lib/python3.12/site-packages/pd4web/Pd4Web/bin/ninja -v cmTC_0ebf9
+[1/2] /home/adiginton/.local/lib/python3.12/site-packages/pd4web/Pd4Web/emsdk/upstream/emscripten/emcc   -pthread -matomics -mbulk-memory -O3 -flto -pthread -matomics -mbulk-memory -msimd128 -MD -MT CMakeFiles/cmTC_0ebf9.dir/SIZEOF_INT.c.o -MF CMakeFiles/cmTC_0ebf9.dir/SIZEOF_INT.c.o.d -o CMakeFiles/cmTC_0ebf9.dir/SIZEOF_INT.c.o -c /home/adiginton/Documents/vsat_audience/src/pd4web/.build/CMakeFiles/CheckTypeSize/SIZEOF_INT.c
+[2/2] : && /home/adiginton/.local/lib/python3.12/site-packages/pd4web/Pd4Web/emsdk/upstream/emscripten/emcc -pthread -matomics -mbulk-memory -O3 -flto -pthread -matomics -mbulk-memory -msimd128 --preload-file "/home/adiginton/Documents/vsat_audience/src/pd4web/Pd4Web/Externals//pdlua/pd.lua@/pd.lua" --preload-file "/home/adiginton/Documents/vsat_audience/src/pd4web/Pd4Web/Externals//pdlua/pdlua/tutorial/examples/pdx.lua@/pdx.lua" --preload-file "/home/adiginton/Documents/vsat_audience/src/pd4web/Pd4Web/Externals//pdlua/InterRegular.ttf@/InterRegular.ttf" CMakeFiles/cmTC_0ebf9.dir/SIZEOF_INT.c.o -o cmTC_0ebf9.js  -lm  --oformat=wasm  -sWASM=1 && :
+
+
+
+Determining size of long passed with the following output:
+Change Dir: '/home/adiginton/Documents/vsat_audience/src/pd4web/.build/CMakeFiles/CMakeTmp'
+
+Run Build Command(s): /home/adiginton/.local/lib/python3.12/site-packages/pd4web/Pd4Web/bin/ninja -v cmTC_7b1ff
+[1/2] /home/adiginton/.local/lib/python3.12/site-packages/pd4web/Pd4Web/emsdk/upstream/emscripten/emcc   -pthread -matomics -mbulk-memory -O3 -flto -pthread -matomics -mbulk-memory -msimd128 -MD -MT CMakeFiles/cmTC_7b1ff.dir/SIZEOF_LONG.c.o -MF CMakeFiles/cmTC_7b1ff.dir/SIZEOF_LONG.c.o.d -o CMakeFiles/cmTC_7b1ff.dir/SIZEOF_LONG.c.o -c /home/adiginton/Documents/vsat_audience/src/pd4web/.build/CMakeFiles/CheckTypeSize/SIZEOF_LONG.c
+[2/2] : && /home/adiginton/.local/lib/python3.12/site-packages/pd4web/Pd4Web/emsdk/upstream/emscripten/emcc -pthread -matomics -mbulk-memory -O3 -flto -pthread -matomics -mbulk-memory -msimd128 --preload-file "/home/adiginton/Documents/vsat_audience/src/pd4web/Pd4Web/Externals//pdlua/pd.lua@/pd.lua" --preload-file "/home/adiginton/Documents/vsat_audience/src/pd4web/Pd4Web/Externals//pdlua/pdlua/tutorial/examples/pdx.lua@/pdx.lua" --preload-file "/home/adiginton/Documents/vsat_audience/src/pd4web/Pd4Web/Externals//pdlua/InterRegular.ttf@/InterRegular.ttf" CMakeFiles/cmTC_7b1ff.dir/SIZEOF_LONG.c.o -o cmTC_7b1ff.js  -lm  --oformat=wasm  -sWASM=1 && :
+
+
+
+Determining size of long long passed with the following output:
+Change Dir: '/home/adiginton/Documents/vsat_audience/src/pd4web/.build/CMakeFiles/CMakeTmp'
+
+Run Build Command(s): /home/adiginton/.local/lib/python3.12/site-packages/pd4web/Pd4Web/bin/ninja -v cmTC_8a533
+[1/2] /home/adiginton/.local/lib/python3.12/site-packages/pd4web/Pd4Web/emsdk/upstream/emscripten/emcc   -pthread -matomics -mbulk-memory -O3 -flto -pthread -matomics -mbulk-memory -msimd128 -MD -MT CMakeFiles/cmTC_8a533.dir/SIZEOF_LONG_LONG.c.o -MF CMakeFiles/cmTC_8a533.dir/SIZEOF_LONG_LONG.c.o.d -o CMakeFiles/cmTC_8a533.dir/SIZEOF_LONG_LONG.c.o -c /home/adiginton/Documents/vsat_audience/src/pd4web/.build/CMakeFiles/CheckTypeSize/SIZEOF_LONG_LONG.c
+[2/2] : && /home/adiginton/.local/lib/python3.12/site-packages/pd4web/Pd4Web/emsdk/upstream/emscripten/emcc -pthread -matomics -mbulk-memory -O3 -flto -pthread -matomics -mbulk-memory -msimd128 --preload-file "/home/adiginton/Documents/vsat_audience/src/pd4web/Pd4Web/Externals//pdlua/pd.lua@/pd.lua" --preload-file "/home/adiginton/Documents/vsat_audience/src/pd4web/Pd4Web/Externals//pdlua/pdlua/tutorial/examples/pdx.lua@/pdx.lua" --preload-file "/home/adiginton/Documents/vsat_audience/src/pd4web/Pd4Web/Externals//pdlua/InterRegular.ttf@/InterRegular.ttf" CMakeFiles/cmTC_8a533.dir/SIZEOF_LONG_LONG.c.o -o cmTC_8a533.js  -lm  --oformat=wasm  -sWASM=1 && :
+
+
+
+Determining size of unsigned int passed with the following output:
+Change Dir: '/home/adiginton/Documents/vsat_audience/src/pd4web/.build/CMakeFiles/CMakeTmp'
+
+Run Build Command(s): /home/adiginton/.local/lib/python3.12/site-packages/pd4web/Pd4Web/bin/ninja -v cmTC_fd2ac
+[1/2] /home/adiginton/.local/lib/python3.12/site-packages/pd4web/Pd4Web/emsdk/upstream/emscripten/emcc   -pthread -matomics -mbulk-memory -O3 -flto -pthread -matomics -mbulk-memory -msimd128 -MD -MT CMakeFiles/cmTC_fd2ac.dir/SIZEOF_UNSIGNED_INT.c.o -MF CMakeFiles/cmTC_fd2ac.dir/SIZEOF_UNSIGNED_INT.c.o.d -o CMakeFiles/cmTC_fd2ac.dir/SIZEOF_UNSIGNED_INT.c.o -c /home/adiginton/Documents/vsat_audience/src/pd4web/.build/CMakeFiles/CheckTypeSize/SIZEOF_UNSIGNED_INT.c
+[2/2] : && /home/adiginton/.local/lib/python3.12/site-packages/pd4web/Pd4Web/emsdk/upstream/emscripten/emcc -pthread -matomics -mbulk-memory -O3 -flto -pthread -matomics -mbulk-memory -msimd128 --preload-file "/home/adiginton/Documents/vsat_audience/src/pd4web/Pd4Web/Externals//pdlua/pd.lua@/pd.lua" --preload-file "/home/adiginton/Documents/vsat_audience/src/pd4web/Pd4Web/Externals//pdlua/pdlua/tutorial/examples/pdx.lua@/pdx.lua" --preload-file "/home/adiginton/Documents/vsat_audience/src/pd4web/Pd4Web/Externals//pdlua/InterRegular.ttf@/InterRegular.ttf" CMakeFiles/cmTC_fd2ac.dir/SIZEOF_UNSIGNED_INT.c.o -o cmTC_fd2ac.js  -lm  --oformat=wasm  -sWASM=1 && :
+
+
+
+Determining size of unsigned long passed with the following output:
+Change Dir: '/home/adiginton/Documents/vsat_audience/src/pd4web/.build/CMakeFiles/CMakeTmp'
+
+Run Build Command(s): /home/adiginton/.local/lib/python3.12/site-packages/pd4web/Pd4Web/bin/ninja -v cmTC_8d232
+[1/2] /home/adiginton/.local/lib/python3.12/site-packages/pd4web/Pd4Web/emsdk/upstream/emscripten/emcc   -pthread -matomics -mbulk-memory -O3 -flto -pthread -matomics -mbulk-memory -msimd128 -MD -MT CMakeFiles/cmTC_8d232.dir/SIZEOF_UNSIGNED_LONG.c.o -MF CMakeFiles/cmTC_8d232.dir/SIZEOF_UNSIGNED_LONG.c.o.d -o CMakeFiles/cmTC_8d232.dir/SIZEOF_UNSIGNED_LONG.c.o -c /home/adiginton/Documents/vsat_audience/src/pd4web/.build/CMakeFiles/CheckTypeSize/SIZEOF_UNSIGNED_LONG.c
+[2/2] : && /home/adiginton/.local/lib/python3.12/site-packages/pd4web/Pd4Web/emsdk/upstream/emscripten/emcc -pthread -matomics -mbulk-memory -O3 -flto -pthread -matomics -mbulk-memory -msimd128 --preload-file "/home/adiginton/Documents/vsat_audience/src/pd4web/Pd4Web/Externals//pdlua/pd.lua@/pd.lua" --preload-file "/home/adiginton/Documents/vsat_audience/src/pd4web/Pd4Web/Externals//pdlua/pdlua/tutorial/examples/pdx.lua@/pdx.lua" --preload-file "/home/adiginton/Documents/vsat_audience/src/pd4web/Pd4Web/Externals//pdlua/InterRegular.ttf@/InterRegular.ttf" CMakeFiles/cmTC_8d232.dir/SIZEOF_UNSIGNED_LONG.c.o -o cmTC_8d232.js  -lm  --oformat=wasm  -sWASM=1 && :
+
+
+
+Determining size of unsigned long long passed with the following output:
+Change Dir: '/home/adiginton/Documents/vsat_audience/src/pd4web/.build/CMakeFiles/CMakeTmp'
+
+Run Build Command(s): /home/adiginton/.local/lib/python3.12/site-packages/pd4web/Pd4Web/bin/ninja -v cmTC_4d6e9
+[1/2] /home/adiginton/.local/lib/python3.12/site-packages/pd4web/Pd4Web/emsdk/upstream/emscripten/emcc   -pthread -matomics -mbulk-memory -O3 -flto -pthread -matomics -mbulk-memory -msimd128 -MD -MT CMakeFiles/cmTC_4d6e9.dir/SIZEOF_UNSIGNED_LONG_LONG.c.o -MF CMakeFiles/cmTC_4d6e9.dir/SIZEOF_UNSIGNED_LONG_LONG.c.o.d -o CMakeFiles/cmTC_4d6e9.dir/SIZEOF_UNSIGNED_LONG_LONG.c.o -c /home/adiginton/Documents/vsat_audience/src/pd4web/.build/CMakeFiles/CheckTypeSize/SIZEOF_UNSIGNED_LONG_LONG.c
+[2/2] : && /home/adiginton/.local/lib/python3.12/site-packages/pd4web/Pd4Web/emsdk/upstream/emscripten/emcc -pthread -matomics -mbulk-memory -O3 -flto -pthread -matomics -mbulk-memory -msimd128 --preload-file "/home/adiginton/Documents/vsat_audience/src/pd4web/Pd4Web/Externals//pdlua/pd.lua@/pd.lua" --preload-file "/home/adiginton/Documents/vsat_audience/src/pd4web/Pd4Web/Externals//pdlua/pdlua/tutorial/examples/pdx.lua@/pdx.lua" --preload-file "/home/adiginton/Documents/vsat_audience/src/pd4web/Pd4Web/Externals//pdlua/InterRegular.ttf@/InterRegular.ttf" CMakeFiles/cmTC_4d6e9.dir/SIZEOF_UNSIGNED_LONG_LONG.c.o -o cmTC_4d6e9.js  -lm  --oformat=wasm  -sWASM=1 && :
+
+
+
+Determining size of size_t passed with the following output:
+Change Dir: '/home/adiginton/Documents/vsat_audience/src/pd4web/.build/CMakeFiles/CMakeTmp'
+
+Run Build Command(s): /home/adiginton/.local/lib/python3.12/site-packages/pd4web/Pd4Web/bin/ninja -v cmTC_e4b5f
+[1/2] /home/adiginton/.local/lib/python3.12/site-packages/pd4web/Pd4Web/emsdk/upstream/emscripten/emcc   -pthread -matomics -mbulk-memory -O3 -flto -pthread -matomics -mbulk-memory -msimd128 -MD -MT CMakeFiles/cmTC_e4b5f.dir/SIZEOF_SIZE_T.c.o -MF CMakeFiles/cmTC_e4b5f.dir/SIZEOF_SIZE_T.c.o.d -o CMakeFiles/cmTC_e4b5f.dir/SIZEOF_SIZE_T.c.o -c /home/adiginton/Documents/vsat_audience/src/pd4web/.build/CMakeFiles/CheckTypeSize/SIZEOF_SIZE_T.c
+[2/2] : && /home/adiginton/.local/lib/python3.12/site-packages/pd4web/Pd4Web/emsdk/upstream/emscripten/emcc -pthread -matomics -mbulk-memory -O3 -flto -pthread -matomics -mbulk-memory -msimd128 --preload-file "/home/adiginton/Documents/vsat_audience/src/pd4web/Pd4Web/Externals//pdlua/pd.lua@/pd.lua" --preload-file "/home/adiginton/Documents/vsat_audience/src/pd4web/Pd4Web/Externals//pdlua/pdlua/tutorial/examples/pdx.lua@/pdx.lua" --preload-file "/home/adiginton/Documents/vsat_audience/src/pd4web/Pd4Web/Externals//pdlua/InterRegular.ttf@/InterRegular.ttf" CMakeFiles/cmTC_e4b5f.dir/SIZEOF_SIZE_T.c.o -o cmTC_e4b5f.js  -lm  --oformat=wasm  -sWASM=1 && :
+
+
+
+Determining size of ptrdiff_t passed with the following output:
+Change Dir: '/home/adiginton/Documents/vsat_audience/src/pd4web/.build/CMakeFiles/CMakeTmp'
+
+Run Build Command(s): /home/adiginton/.local/lib/python3.12/site-packages/pd4web/Pd4Web/bin/ninja -v cmTC_5cf4f
+[1/2] /home/adiginton/.local/lib/python3.12/site-packages/pd4web/Pd4Web/emsdk/upstream/emscripten/emcc   -pthread -matomics -mbulk-memory -O3 -flto -pthread -matomics -mbulk-memory -msimd128 -MD -MT CMakeFiles/cmTC_5cf4f.dir/SIZEOF_PTRDIFF_T.c.o -MF CMakeFiles/cmTC_5cf4f.dir/SIZEOF_PTRDIFF_T.c.o.d -o CMakeFiles/cmTC_5cf4f.dir/SIZEOF_PTRDIFF_T.c.o -c /home/adiginton/Documents/vsat_audience/src/pd4web/.build/CMakeFiles/CheckTypeSize/SIZEOF_PTRDIFF_T.c
+[2/2] : && /home/adiginton/.local/lib/python3.12/site-packages/pd4web/Pd4Web/emsdk/upstream/emscripten/emcc -pthread -matomics -mbulk-memory -O3 -flto -pthread -matomics -mbulk-memory -msimd128 --preload-file "/home/adiginton/Documents/vsat_audience/src/pd4web/Pd4Web/Externals//pdlua/pd.lua@/pd.lua" --preload-file "/home/adiginton/Documents/vsat_audience/src/pd4web/Pd4Web/Externals//pdlua/pdlua/tutorial/examples/pdx.lua@/pdx.lua" --preload-file "/home/adiginton/Documents/vsat_audience/src/pd4web/Pd4Web/Externals//pdlua/InterRegular.ttf@/InterRegular.ttf" CMakeFiles/cmTC_5cf4f.dir/SIZEOF_PTRDIFF_T.c.o -o cmTC_5cf4f.js  -lm  --oformat=wasm  -sWASM=1 && :
+
+
+

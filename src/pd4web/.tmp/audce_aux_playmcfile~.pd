@@ -1,0 +1,109 @@
+#N canvas 682 155 679 585 10; 
+#X msg 303 120 \; pd dsp 1; 
+#X obj 31 446 outlet~; 
+#X obj 120 306 print file just played!; 
+#X obj 86 446 outlet~; 
+#X obj 141 447 outlet~; 
+#X obj 196 447 outlet~; 
+#X obj 252 447 outlet~; 
+#X obj 307 447 outlet~; 
+#X obj 31 296 readsf~ 6; 
+#X floatatom 245 118 5 0 0 0 - - -; 
+#X obj 297 21 loadbang; 
+#X msg 311 66 0, f 2; 
+#X msg 370 78 1, f 2; 
+#X obj 289 320 cnv 15 100 60 empty empty empty 20 12 0 14 -233017 -66577 
+0; 
+#X text 249 99 Chns; 
+#X floatatom 399 264 5 0 0 0 - - -; 
+#X text 441 265 Bytes/channel; 
+#X symbolatom 400 291 5 0 0 0 - - -; 
+#X text 442 293 Endianness; 
+#X text 203 99 Header; 
+#X floatatom 165 118 5 0 0 0 - - -; 
+#X text 151 100 Samples; 
+#X symbolatom 97 118 10 0 0 0 - - -; 
+#X msg 110 245 open \$1 \$2 \$3 \$4; 
+#X text 115 100 File; 
+#X text 52 100 Play; 
+#X text 83 100 Stop; 
+#X obj 54 119 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1 
+-1; 
+#X obj 74 119 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1 
+-1; 
+#X obj 245 77 inlet; 
+#X obj 205 77 inlet; 
+#X obj 161 77 inlet; 
+#X obj 118 77 inlet; 
+#X obj 58 17 inlet; 
+#X obj 14 17 inlet; 
+#X msg 31 147 1; 
+#X msg 66 147 0; 
+#X obj 363 448 outlet; 
+#X text 18 -60 USAGE: Feed "File path" \, Starting "Samples" \, Header 
+size to skip \, and No. of Channels. Default: 1 Channel \, 0 Header 
+to skip \, Starting from beginning (0). Must send "play" and "stop" 
+(bangs to the corresponding inlets).; 
+#X floatatom 205 118 5 0 0 0 - - -; 
+#X text 28 489 AUDIENCE/OA v.1.0.rel.250510.rgs. audce_aux_playmcfile~. 
+BSD and GPL applies. Copyright AUDIENCE Team \, 2010; 
+#X text 392 32 NOTE 1: Starts turning "compute audio"; 
+#X text 287 185 NOTE 2: if soundfile has SR different from the one 
+Pd is using \, than samples will be incorrect above.; 
+#X text 287 227 NOTE 3: this object deals with sound files up to 6 
+channels.; 
+#X text 287 260 NOTE 4: Not used:; 
+#X text 392 47 and applying default values.; 
+#X obj 97 41 bng 15 250 50 0 empty empty empty 17 7 0 10 -262144 -1 
+-1; 
+#X obj 118 41 t b b b b b; 
+#X obj 200 150 list; 
+#X obj 155 173 list; 
+#X obj 110 196 list; 
+#X obj 304 42 t b b b b; 
+#X msg 344 68 0, f 2; 
+#X obj 110 277 print file to; 
+#X obj 110 155 symbol; 
+#X connect 8 0 1 0; 
+#X connect 8 1 3 0; 
+#X connect 8 2 4 0; 
+#X connect 8 3 5 0; 
+#X connect 8 4 6 0; 
+#X connect 8 5 7 0; 
+#X connect 8 6 2 0; 
+#X connect 8 6 37 0; 
+#X connect 9 0 48 1; 
+#X connect 10 0 51 0; 
+#X connect 11 0 20 0; 
+#X connect 12 0 9 0; 
+#X connect 20 0 49 0; 
+#X connect 23 0 8 0; 
+#X connect 23 0 53 0; 
+#X connect 27 0 47 0; 
+#X connect 28 0 36 0; 
+#X connect 29 0 9 0; 
+#X connect 30 0 39 0; 
+#X connect 31 0 20 0; 
+#X connect 32 0 22 0; 
+#X connect 32 0 54 1; 
+#X connect 33 0 28 0; 
+#X connect 34 0 27 0; 
+#X connect 35 0 8 0; 
+#X connect 36 0 8 0; 
+#X connect 39 0 48 0; 
+#X connect 46 0 54 0; 
+#X connect 47 0 35 0; 
+#X connect 47 1 54 0; 
+#X connect 47 2 20 0; 
+#X connect 47 3 39 0; 
+#X connect 47 4 9 0; 
+#X connect 48 0 49 1; 
+#X connect 49 0 50 1; 
+#X connect 50 0 23 0; 
+#X connect 51 0 0 0; 
+#X connect 51 1 11 0; 
+#X connect 51 2 52 0; 
+#X connect 51 3 12 0; 
+#X connect 52 0 39 0; 
+#X connect 54 0 50 0; 
+#X coords 0 -1 1 1 231 40 2 50 100; 

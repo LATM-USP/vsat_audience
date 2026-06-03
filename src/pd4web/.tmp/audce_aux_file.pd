@@ -1,0 +1,43 @@
+#N canvas 492 40 556 414 10; 
+#X obj 101 101 cnv 15 229 49 empty empty \$1 4 10 0 10 -262144 -4160 
+0; 
+#X symbolatom 104 129 32 0 0 0 - - -; 
+#X obj -11 2 loadbang; 
+#X obj 307 130 bng 15 250 50 0 empty empty open -3 -8 0 10 -228856 
+-4160 -4160; 
+#X obj 245 76 openpanel; 
+#X msg 3 167 \$1; 
+#X msg -11 107 \$1; 
+#X obj 92 -26 inlet; 
+#X obj 92 25 unpack s s; 
+#X obj -11 44 symbol \$1; 
+#X obj 5 68 symbol \$2; 
+#X text 162 167 Sends the absolute path to file in "fileNAME" variable 
+; 
+#X text 201 -2 USAGE: audce_aux_file NAME /path/to/file.wav; 
+#X obj -11 194 print Object_created; 
+#X obj 3 220 print File_path_to_Object_created; 
+#X obj 104 167 s File\$1; 
+#X text 7 311 AUDIENCE/OA v.1.0.rel.250510.rgs. audce_aux_file. BSD 
+and GPL applies. Copyright AUDIENCE Team \, 2010; 
+#X text 7 267 Limitation: can not use \$1 \, \$2 or \$3 since their 
+values can not be changed...; 
+#X obj 45 2 t b b; 
+#X connect 1 0 5 0; 
+#X connect 1 0 15 0; 
+#X connect 2 0 9 0; 
+#X connect 2 0 10 0; 
+#X connect 3 0 4 0; 
+#X connect 4 0 1 0; 
+#X connect 5 0 14 0; 
+#X connect 6 0 13 0; 
+#X connect 7 0 8 0; 
+#X connect 7 0 18 0; 
+#X connect 8 0 9 1; 
+#X connect 8 1 10 1; 
+#X connect 9 0 6 0; 
+#X connect 10 0 1 0; 
+#X connect 10 0 5 0; 
+#X connect 18 0 10 0; 
+#X connect 18 1 9 0; 
+#X coords 0 -1 1 1 231 51 2 100 100; 
