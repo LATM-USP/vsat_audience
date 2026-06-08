@@ -21,5 +21,3 @@ Para acesso aos arquivos do AUDIENCE, requer acesso ao repositório principal (p
 
 - DESCREVER O ROTEIRO DE USO A PARTIR DE UMA ESTÓRIA NA WEB
 - CONSIDERANDO REDE LOCAL, DESCREVA O ROTEIRO DE USO
-
-

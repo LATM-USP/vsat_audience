@@ -1,0 +1,51 @@
+#N canvas 478 196 790 442 10; 
+#X msg 150 167 0; 
+#X obj 91 248 env~ 16384; 
+#X floatatom 91 267 0 0 0 0 - - -; 
+#X msg 314 -41 \; pd dsp 1; 
+#X obj 31 201 readsf~ 1 1e+06; 
+#X obj 31 51 t list; 
+#X obj 31 27 list append 1 2; 
+#X msg 31 83 open \$1 \$2 \, 1; 
+#X msg 133 7 1.5e+06; 
+#X obj 31 -62 inlet; 
+#X obj 118 -13 inlet; 
+#X obj 31 265 outlet~; 
+#X obj 150 144 inlet; 
+#X obj 222 249 outlet; 
+#X text 70 -62 Input file path; 
+#X text 158 -13 Input sample to start; 
+#X text 192 144 Input command to stop: 0 stops playing.; 
+#X text 138 195 Optional arguments: number of channels \; buffer size 
+per channnel in bytes.; 
+#X text 121 79 Open /path/file sample \, and start playing (sending 
+1 starts playing).; 
+#X text 26 321 AUDIENCE/OA v.1.0.rel.250510.rgs. audce_aux_playmonofile~. 
+BSD and GPL applies. Copyright AUDIENCE Team \, 2010; 
+#X text 187 9 Test; 
+#X text 220 269 Last outlet gives a "bang" when the soundfile is done. 
+; 
+#X text 162 249 Test; 
+#X obj 314 -64 loadbang; 
+#X text 121 -38 Test; 
+#X msg 123 114 open ./teste.wav 220500; 
+#X msg 44 -39 ./teste.wav; 
+#X text 424 -33 USAGE: Set up the path to file to start playing it. 
+Send bang to 3rd. inlet to stop. Optional: Send sample to start to 
+2nd inlet BEFORE setting up the file-name on 1st inlet.; 
+#X text 424 -71 Playmonofile~ takes an onset in sample frames and the 
+path to the file to play. Adopts the readsf~ object defaults.; 
+#X connect 0 0 4 0; 
+#X connect 1 0 2 0; 
+#X connect 4 0 11 0; 
+#X connect 4 1 13 0; 
+#X connect 5 0 7 0; 
+#X connect 6 0 5 0; 
+#X connect 7 0 4 0; 
+#X connect 8 0 6 1; 
+#X connect 9 0 6 0; 
+#X connect 10 0 6 1; 
+#X connect 12 0 0 0; 
+#X connect 23 0 3 0; 
+#X connect 25 0 4 0; 
+#X connect 26 0 6 0; 
