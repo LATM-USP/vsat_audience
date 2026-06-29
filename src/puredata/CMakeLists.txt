@@ -107,5 +107,5 @@ endif()
 set_target_properties(pd4web PROPERTIES LINK_FLAGS "${EMCC_LINK_FLAGS}
 	--preload-file \"${CMAKE_CURRENT_SOURCE_DIR}/WebPatch/index.pd@/index.pd\"
 	--preload-file \"${CMAKE_CURRENT_SOURCE_DIR}/.tmp@/Libs/\"
-	--preload-file \"${CMAKE_CURRENT_SOURCE_DIR}/Pd4Web/Externals/audience/audce@Pd4Web/Externals/audience/audce\"")
+	--preload-file \"${CMAKE_CURRENT_SOURCE_DIR}/Libs@Libs\"")
 
