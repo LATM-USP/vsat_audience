@@ -1,0 +1,74 @@
+#N canvas 341 28 981 685 12;
+#X declare -path Libs;
+#X text 223 605 Left;
+#X text 271 605 Right;
+#X obj 235 575 dac~ 1 2;
+#X text 308 554 Saída estéreo pronta para escuta em fone (L e R)
+;
+#X obj 183 13 r ori_rcv;
+#X obj 674 433 print audce;
+#X text 765 425 p/ debugging: manda p/ console, f 24;
+#X text 470 125 receive NewPathTosnd1 (recebe nome arquivo ambisonic
+/path/sound.wav), f 70;
+#X text 471 145 receive pplaysnd1 (recebe bang p/ play);
+#X text 470 165 receive ppausesnd1 (recebe bang p/ pause);
+#X text 470 184 receive sstopsnd1 (recebe bang p/ stop);
+#X text 410 275 Saídas: sinais de audio W' \, X' \, Y' e Z' (rotacionados)
+, f 57;
+#X text 303 25 Entrada: recebe mensagem no formato 'ori_rcv X Y Z'
+, f 53;
+#X text 460 80 Entrada: patch snd1 tocador ao lado recebe diretamente
+comandos p/ abrir arquivo \, play \, pause e stop:;
+#X text 206 79 player (audce_L4_objplay5~ snd1);
+#X text 388 251 ROTACIONADOR;
+#X text 365 309 DECODIFICADOR (ambisonic -> stereo);
+#X text 308 575 saída de audio para pd4web repassar;
+#X text 767 480 Saida: devolve metadados para vsat (browser), f 24
+;
+#X obj 674 485 s audceback;
+#X obj 208 106 Libs/audce_L4_objplay5~ snd1 audce.wav;
+#X obj 797 22 declare -path Libs;
+#X obj 143 251 audce_L4_amb_rot~ 1, f 30;
+#X obj 143 309 audce_L4_amb_3rd~ 1 1;
+#X text 471 204 send snd1played (envia bang quando audio acaba);
+#X obj 288 500 *~ 1;
+#X obj 235 500 *~ 1;
+#N canvas 0 25 450 300 logic_EQ 0;
+#X obj 85 54 inlet;
+#X obj 89 149 outlet;
+#X obj 158 151 outlet;
+#X restore 73 386 pd logic_EQ;
+#X obj 235 438 lop~ 16000;
+#X obj 323 438 lop~ 16000;
+#X obj 14 14 r alfa;
+#X obj 29 37 r beta;
+#X obj 39 61 r fcut_1;
+#X obj 50 88 r vol_1;
+#X obj 67 115 r fcut_2;
+#X obj 81 141 r vol_2;
+#X connect 4 0 22 0;
+#X connect 4 0 27 0;
+#X connect 20 0 22 0;
+#X connect 20 1 22 1;
+#X connect 20 2 22 2;
+#X connect 20 3 22 3;
+#X connect 22 0 23 0;
+#X connect 22 1 23 1;
+#X connect 22 2 23 2;
+#X connect 22 3 23 3;
+#X connect 23 0 28 0;
+#X connect 23 1 29 0;
+#X connect 25 0 2 1;
+#X connect 26 0 2 0;
+#X connect 27 0 26 1;
+#X connect 27 0 25 1;
+#X connect 27 1 28 1;
+#X connect 27 1 29 1;
+#X connect 28 0 26 0;
+#X connect 29 0 25 0;
+#X connect 30 0 27 0;
+#X connect 31 0 27 0;
+#X connect 32 0 27 0;
+#X connect 33 0 27 0;
+#X connect 34 0 27 0;
+#X connect 35 0 27 0;
