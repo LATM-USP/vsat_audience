@@ -38,6 +38,9 @@ const serializedStory = DOMPurify.sanitize(
   import { isTitleCardScene, titleCardSceneFor } from "./titleCardSceneFor";
   import type { Current, RenderOptions } from "./types";
 
+  //import Pd4WebModule from "./audience/pd4web.js";
+  //import "./audience/pd4web.threads.js";
+
   /**
    * The maximum width of the text (fiction) content.
    */
@@ -53,7 +56,6 @@ const serializedStory = DOMPurify.sanitize(
    * The `y` value for each of the above is relative to this value.
    */
   const FICTION_Y = 5;
-
   /**
    * How much to "bump" text forward off the background box so that it can be
    * read.
@@ -93,23 +95,36 @@ const serializedStory = DOMPurify.sanitize(
     },
   });
 
+  // audience audio setup
+  /*let Pd4Web: any = null;
+  
+  Pd4WebModule().then((Pd4WebModulePromise: any) => {
+  Pd4Web = new Pd4WebModulePromise.Pd4Web();
+  Pd4Web.openPatch("./audience/index.pd", { renderGui: false });
+
+    document.addEventListener("click",() => {
+        Pd4Web.init();
+        console.log("Pd4Web initialized on user interaction");
+        setTimeout(() => {
+          Pd4Web.sendSymbol("NewPathTosnd1", current.scene.audio.id);
+          Pd4Web.sendBang("pplaysnd1");
+        }, 1000);
+      }, { once: true },
+    );
+
+    //Pd4Web.onBangReceived("ended", (r) => {
+    // logica aframe para tocar denovo
+    //  Pd4Web.sendBang("pplaysnd1");
+    //});
+
+  });*/
+
   AFRAME.registerComponent("story", {
     init: function () {
       const openingScene = openingSceneFor(window.current.story);
       const openingPage = openingPageFor(openingScene);
-      const params = new URLSearchParams(window.location.search);
-      const requestedSceneId = Number(params.get("scene"));
-      const requestedScene =
-        Number.isFinite(requestedSceneId) && requestedSceneId > 0
-          ? window.current.story.scenes.find(
-              (scene: { id: number }) => scene.id === requestedSceneId,
-            )
-          : undefined;
 
-      if (requestedScene) {
-        window.current.scene = requestedScene;
-        window.current.page = openingPageFor(requestedScene);
-      } else if (!!openingScene.audio) {
+      if (!!openingScene.audio) {
         const [titleCardScene, titleCardPage] = titleCardSceneFor(
           window.current.story.title,
           openingScene,
@@ -143,12 +158,6 @@ const serializedStory = DOMPurify.sanitize(
           this.render(window.current, { isSceneChange: !!change.toScene });
         }
       },
-      pointermove: function () {
-        const sound = this.el.components.sound;
-        if (!sound?.isPlaying) {
-          sound?.playSound?.();
-        }
-      },
     },
     render: function (current: Current, options: RenderOptions) {
       const sky = document.querySelector("a-sky");
@@ -160,21 +169,21 @@ const serializedStory = DOMPurify.sanitize(
         }
       }
 
-      if (options.isSceneChange) {
-        const existingSound = this.el.components.sound;
-
-        if (existingSound?.isPlaying) {
-          existingSound.stopSound();
-        }
-
-        if (current.scene.audio) {
-          this.el.setAttribute(
-            "sound",
-            `src: #audio-${current.scene.audio.id}; autoplay: true; positional: false`,
-          );
-        } else {
-          this.el.removeAttribute("sound");
-        }
+      const existingSound = this.el.components.sound;
+      if (existingSound?.isPlaying) {
+        existingSound.stopSound();
+      }
+      if (current.scene.audio) {
+        this.el.setAttribute(
+          "sound",
+          `src: #audio-${current.scene.audio.id}; 
+          autoplay: true; 
+          volume: 7;
+          loop: true;
+          positional: false`,
+        );
+      } else {
+        this.el.removeAttribute("sound");
       }
 
       const fiction = document.getElementById("fiction");
@@ -266,19 +275,22 @@ const serializedStory = DOMPurify.sanitize(
           }
         }
       }
-
-      const contextDetail = {
-        sceneId: current.scene.id,
-        sceneTitle: current.scene.title,
-        pageNumber: current.page.number,
-      };
-      window.vsatStoryContext = contextDetail;
-      window.dispatchEvent(
-        new CustomEvent("vsat:story-context", {
-          detail: contextDetail,
-        }),
-      );
     },
+  });
+
+  AFRAME.registerComponent('rotation-reader', {
+    init: function () {
+      window.addEventListener('click', () => {
+        const rotation = (this.el.object3D.rotation);
+        console.log('Rotação atual:', rotation);
+        /*if (Pd4Web) {
+        // default do aframe e 10x10x10 (metros)
+        // room metros
+          Pd4Web.sendList("ori_rcv", [rotation.x, rotation.y, rotation.z]);
+          console.log('Enviando rotação para Pd4Web:'); 
+        }*/
+      });
+    }
   });
 
   AFRAME.registerComponent("block-heading", {
