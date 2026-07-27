@@ -37,6 +37,11 @@ const serializedStory = DOMPurify.sanitize(
   import { EVENT_LINK_ACTIVATED } from "./linkActivated";
   import { isTitleCardScene, titleCardSceneFor } from "./titleCardSceneFor";
   import type { Current, RenderOptions } from "./types";
+  import loadPd4WebModuleFactory, {
+    pd4WebAssetUrls,
+  } from "@puredata/WebPatch/pd4webLoader";
+
+  /// <reference path="../../../../puredata/WebPatch/pd4web.d.ts" />
 
   /**
    * The maximum width of the text (fiction) content.
@@ -93,6 +98,96 @@ const serializedStory = DOMPurify.sanitize(
     },
   });
 
+  // audience audio setup
+  let pd4Web: pd4web.Pd4Web | null = null;
+  let pd4WebAudioInitialized = false;
+  let pd4WebLoadedSceneId: number | null = null;
+
+  const locatePd4WebAsset = (path: string) => {
+    if (path.endsWith(".wasm")) {
+      return pd4WebAssetUrls.wasm;
+    }
+    if (path.endsWith(".data")) {
+      return pd4WebAssetUrls.data;
+    }
+    if (path.endsWith(".threads.js")) {
+      return pd4WebAssetUrls.threads;
+    }
+    if (path.endsWith(".js")) {
+      return pd4WebAssetUrls.script;
+    }
+    return path;
+  };
+
+  function pd4WebPathForScene(storyId: number, sceneId: number) {
+    return `./${storyId}-${sceneId}.wav`;
+  }
+
+  async function sendSceneAudioToPd4Web(
+    pd4WebInstance: pd4web.Pd4Web,
+    audioUrl: string,
+    audioPath: string,
+  ) {
+    const response = await fetch(audioUrl);
+    if (!response.ok) {
+      throw new Error(`Failed to download audio: ${audioUrl}`);
+    }
+
+    const data = new Uint8Array(await response.arrayBuffer());
+    pd4WebInstance.sendFile(data, audioPath);
+    pd4WebInstance.sendSymbol("NewPathTosnd1", audioPath);
+  }
+
+  async function playSceneAudioInPd4Web(fromUserGesture: boolean) {
+    if (!pd4Web) {
+      return;
+    }
+
+    const scene = window.current.scene;
+    const audioUrl = scene.audio?.url;
+    if (!audioUrl) {
+      return;
+    }
+
+    if (!pd4WebAudioInitialized) {
+      if (!fromUserGesture) {
+        return;
+      }
+      pd4Web.init();
+      pd4WebAudioInitialized = true;
+    }
+
+    try {
+      if (pd4WebLoadedSceneId !== scene.id) {
+        const audioPath = pd4WebPathForScene(
+          window.current.story.id,
+          scene.id,
+        );
+        await sendSceneAudioToPd4Web(pd4Web, audioUrl, audioPath);
+        pd4WebLoadedSceneId = scene.id;
+        await new Promise((resolve) => setTimeout(resolve, 100));
+      }
+
+      pd4Web.sendBang("pplaysnd1");
+    } catch (error) {
+      console.error("Failed to play scene audio in Pd4Web", error);
+    }
+  }
+
+  loadPd4WebModuleFactory()
+    .then((Pd4WebModuleFactory) =>
+      Pd4WebModuleFactory({ locateFile: locatePd4WebAsset }),
+    )
+    .then((module) => {
+      pd4Web = new module.Pd4Web();
+      pd4Web.openPatch("index.pd", { renderGui: false });
+
+      pd4Web.onBangReceived("snd1played", (_bangName) => {
+        // logica aframe para tocar denovo
+        pd4Web?.sendBang("pplaysnd1");
+      });
+    });
+
   AFRAME.registerComponent("story", {
     init: function () {
       const openingScene = openingSceneFor(window.current.story);
@@ -141,12 +236,15 @@ const serializedStory = DOMPurify.sanitize(
           }
 
           this.render(window.current, { isSceneChange: !!change.toScene });
+
+          if (window.current.scene.audio) {
+            void playSceneAudioInPd4Web(true);
+          }
         }
       },
       pointermove: function () {
-        const sound = this.el.components.sound;
-        if (!sound?.isPlaying) {
-          sound?.playSound?.();
+        if (window.current.scene.audio) {
+          void playSceneAudioInPd4Web(true);
         }
       },
     },
@@ -167,14 +265,7 @@ const serializedStory = DOMPurify.sanitize(
           existingSound.stopSound();
         }
 
-        if (current.scene.audio) {
-          this.el.setAttribute(
-            "sound",
-            `src: #audio-${current.scene.audio.id}; autoplay: true; positional: false`,
-          );
-        } else {
-          this.el.removeAttribute("sound");
-        }
+        this.el.removeAttribute("sound");
       }
 
       const fiction = document.getElementById("fiction");
@@ -279,6 +370,36 @@ const serializedStory = DOMPurify.sanitize(
         }),
       );
     },
+  });
+
+  AFRAME.registerComponent("watch-transform", {
+    schema: {
+      eps: { type: "number", default: 0.1 }, // limiar para evitar ruído
+    },
+    init: function () {
+      window.addEventListener("click", () => {
+        const position = new THREE.Vector3();
+        this.el.object3D.getWorldPosition(position);
+
+        if (pd4Web) {
+          console.log("Position", position.x, position.y, position.z);
+          pd4Web.sendList("ori_rcv", [position.y, position.z, position.x]);
+        }
+      });
+    },
+  });
+  window.addEventListener("load", () => {
+    const scene = document.querySelector("a-scene");
+    if (!scene.hasLoaded) {
+      scene.addEventListener("loaded", attachWatcher);
+    } else {
+      attachWatcher();
+    }
+    function attachWatcher() {
+      const cam = document.getElementById("target");
+      // sensibilidade
+      cam.setAttribute("watch-transform", "eps: 0.0008");
+    }
   });
 
   AFRAME.registerComponent("block-heading", {
@@ -541,6 +662,17 @@ const serializedStory = DOMPurify.sanitize(
     },
     events: {
       click: function () {
+        if (pd4Web && pd4WebAudioInitialized) {
+          if (this.data.isPlaying) {
+            pd4Web.sendBang("ppausesnd1");
+            this.el.setAttribute("play-pause-toggle", "isPlaying", false);
+          } else {
+            pd4Web.sendBang("pplaysnd1");
+            this.el.setAttribute("play-pause-toggle", "isPlaying", true);
+          }
+          return;
+        }
+
         const storyEl = document.querySelector("[story]");
         const sound = storyEl?.components?.sound;
         if (!sound) {

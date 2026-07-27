@@ -1,9 +1,14 @@
 import type { RequestHandler } from "express";
 
 const headersToEnableSharedArrayBuffer = new Map([
-  ["Cross-Origin-Embedder-Policy", "require-corp"],
+  // credentialless keeps crossOriginIsolated enabled while still allowing
+  // cross-origin Cloudinary media loaded by the A-Frame asset system.
+  ["Cross-Origin-Embedder-Policy", "credentialless"],
   ["Cross-Origin-Opener-Policy", "same-origin"],
 ]);
+
+const isSameOriginStaticAsset = (path: string) =>
+  /\.(js|mjs|wasm|data|css)$/i.test(path);
 
 /**
  * Middleware that adds headers to the response so that `SharedArrayBuffer`s
@@ -13,6 +18,14 @@ const headersToEnableSharedArrayBuffer = new Map([
  */
 function enableSharedArrayBufferMiddleware(): RequestHandler {
   return (req, res, next) => {
+    const isPd4WebAsset =
+      req.path.startsWith("/puredata/WebPatch/") ||
+      /\/_astro\/pd4web\./.test(req.path);
+
+    if (isPd4WebAsset || isSameOriginStaticAsset(req.path)) {
+      res.setHeader("Cross-Origin-Resource-Policy", "same-origin");
+    }
+
     /*
      * We only want to enable SharedArayBuffer support
      * on the subset of pages that actually need it.

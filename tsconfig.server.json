@@ -38,6 +38,7 @@
     "src/pages",
     "src/middleware.ts",
     "src/**/client/**/*",
+    "src/puredata/**/*",
     "tests",
     "dist"
   ]

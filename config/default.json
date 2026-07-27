@@ -22,7 +22,7 @@
       "maxBytes": 10000000
     },
     "audio": {
-      "maxBytes": 50000000
+      "maxBytes": 200000000
     }
   }
 }

@@ -1,4 +1,7 @@
 // @ts-check
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+
 import { defineConfig } from "astro/config";
 
 import node from "@astrojs/node";
@@ -6,10 +9,13 @@ import node from "@astrojs/node";
 import react from "@astrojs/react";
 import icon from "astro-icon";
 
+import sharedArrayBufferDev from "./vite/sharedArrayBufferDev.mjs";
+
 // https://astro.build/config
 const devApiPort = process.env.DEV_API_PORT ?? "3001";
 const disableViteOverlay =
   process.env.DEV_DISABLE_OVERLAY === "1" || process.env.PLAYWRIGHT === "1";
+const root = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   output: "server",
@@ -43,6 +49,18 @@ export default defineConfig({
   },
 
   vite: {
+    plugins: [sharedArrayBufferDev()],
+    resolve: {
+      alias: {
+        "@puredata/": `${path.resolve(root, "src/puredata")}/`,
+      },
+    },
+    assetsInclude: ["**/*.wasm", "**/*.data"],
+    build: {
+      commonjsOptions: {
+        defaultIsModuleExports: true,
+      },
+    },
     server: {
       port: 4321,
       strictPort: true,
