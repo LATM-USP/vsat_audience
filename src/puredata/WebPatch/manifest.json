@@ -14,10 +14,10 @@
             "type": "image/png"
         }
     ],
-    "name": "pd4web",
+    "name": "vsat-pd4web-3",
     "orientation": "any",
     "screenshots": "",
-    "short_name": "pd4web",
+    "short_name": "vsat-pd4web-3",
     "start_url": "index.html",
     "theme_color": "#000000"
 }

@@ -14,6 +14,7 @@
         <script src="https://aframe.io/releases/1.7.0/aframe.min.js" crossorigin="anonymous"></script>
         <!-- Main modules -->
 
+        <!-- <script src="./pd4web.js"></script> -->
         <script src="./pd4web.js"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
         <style>
@@ -45,34 +46,41 @@
                 color: blue;
             }
 
-            #wasm-loader {
-                position: fixed; /* fica fixo na tela */
-                top: 10px; /* 50% da altura */
-                left: 50%; /* 50% da largura */
-                transform: translate(-50%, -50%); /* centraliza exatamente */
+            #audio-loader {
+                position: fixed;
+                top: 10px;
+                left: 50%;
+                transform: translateX(-50%);
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
-                width: 200px;
+                width: 220px;
                 padding: 8px;
                 border-radius: 5px;
                 background-color: rgba(0, 0, 0, 0.05);
                 box-shadow:
                     rgba(14, 30, 37, 0.12) 0px 2px 4px 0px,
                     rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+                z-index: 9999;
             }
 
-            /* Status texto menor e centralizado */
-            #status {
+            #audio-loader.hidden {
+                display: none;
+            }
+
+            #audio-loader.ready #audio-progress {
+                display: none;
+            }
+
+            #audio-status {
                 font-size: 10px;
                 text-align: center;
                 margin-bottom: 4px;
                 color: var(--fg);
             }
 
-            /* Progress bar menor */
-            #progress {
+            #audio-progress {
                 width: 150px;
                 height: 8px;
                 border-radius: 4px;
@@ -132,72 +140,59 @@
     </head>
     <body>
         <a-scene>
-            <a-assets>
-                <audio id="audio" src="esquerda.wav"></audio>
-            </a-assets>
-            <!-- <a-sound src= "#audio" autoplay= "true" loop= "true" positional = "true" rolloffFactor = "5" refDistance = "1" volume = "10"></a-sound> -->
+            <!-- Audio is loaded by Pd4Web via sendFile; do not preload here (136MB file). -->
             <a-sky src="Untitled.jpeg"></a-sky>
             <!-- câmera com look-controls -->
-            <a-camera id="playerCam" look-controls position="0 1.75 0">
-                <a-cursor>  
-                    
-                </a-cursor>
-                <a-sphere id="targetSphere" color="green" radius="0.05" position="0 0 -3"></a-sphere>
+            <a-camera fov="80" id="playerCam" look-controls position="0 0 0">
+                <a-sphere id="targetSphere" color="green" radius="0.005" position="0 0 -1"></a-sphere>
             </a-camera>
 
-            <a-text position="9 0 0" rotation="0 270 0" value="0 . 0 . 10" 
-                align="center" width="10" color="#FFFFFF"> </a-text>
-            <a-entity geometry="primitive: sphere" material="color: red" position="10 0 0"></a-entity>
+            <a-entity geometry="primitive: sphere" radius="0.005" material="color: red" position="0 10 -10"></a-entity>
+            <a-entity geometry="primitive: sphere" radius="0.005" material="color: blue" position="0 1 0"></a-entity>
+            <a-entity geometry="primitive: sphere" radius="0.005" material="color: yellow" position="0 0 1"></a-entity>
+        </a-scene>
 
-            <a-text position="-9 0 0" rotation="0 90 0" value="0 . 0 . -10" 
-                align="center" width="10" color="#FFFFFF"> </a-text>
-            <a-entity geometry="primitive: sphere" material="color: red" position="-10 0 0"></a-entity>
-
-            <a-text position="0 0 9" rotation="0 180 0" value="10 . 0 . 0" 
-                align="center" width="10" color="#FFFFFF"> </a-text>
-            <a-entity geometry="primitive: sphere" material="color: blue" position="0 0 10"></a-entity>
-
-            <a-text position="0 1.35 -9" rotation="0 0 0" value="-3 . 0 . 1.75" 
-                align="center" width="10" color="#FFFFFF"> </a-text>
-            <!-- <a-entity geometry="primitive: sphere" material="color: blue" position="0 0 -10"></a-entity> -->
-
-            <a-text position="0 -9 0" rotation="-90 0 0" value="0 . 0 . -10" 
-                align="center" width="10" color="#FFFFFF"> </a-text>
-            <a-entity geometry="primitive: sphere" material="color: green" position="0 -10 0"></a-entity>
-
-            <a-text position="0 9 0" rotation="90 0 0" value="0 . 0 . 10" 
-                align="center" width="10" color="#FFFFFF"> </a-text>
-            <a-entity geometry="primitive: sphere" material="color: green" position="0 10 0"></a-entity>
-
-
-        </a-scene>  
-
-        <!-- <div id="wasm-loader" style="text-align: center; margin: 10px">
-            <span id="status">Loading...</span>
-            <progress id="progress" value="0" max="100" style="width: 300px"></progress>
-        </div> -->
+        <div id="audio-loader">
+            <span id="audio-status">Loading audio…</span>
+            <progress id="audio-progress" value="0" max="100"></progress>
+        </div>
 
         <!-- All the styles are in the pd4web.style.css -->
         <span class="pd4web-sound-switch" id="Pd4WebAudioSwitch"></span>
         <script>
-            const statusElement = document.getElementById("status");
-            const progressElement = document.getElementById("progress");
-            function fetchWithProgress(url) {
+            var Pd4Web = null;
+
+            const AUDIO_FILE = "./esquerda.wav";
+            const audioLoader = document.getElementById("audio-loader");
+            const audioStatus = document.getElementById("audio-status");
+            const audioProgress = document.getElementById("audio-progress");
+            let audioReady = null;
+
+            function preloadAudio(url) {
                 return new Promise((resolve, reject) => {
                     const xhr = new XMLHttpRequest();
                     xhr.open("GET", url, true);
                     xhr.responseType = "arraybuffer";
+
                     xhr.onprogress = (event) => {
                         if (event.lengthComputable) {
                             const percent = Math.floor((event.loaded / event.total) * 100);
-                            progressElement.value = percent;
-                            statusElement.textContent = `Downloading WASM... ${percent}%`;
+                            audioProgress.value = percent;
+                            const mb = (event.loaded / 1024 / 1024).toFixed(1);
+                            const totalMb = (event.total / 1024 / 1024).toFixed(1);
+                            audioStatus.textContent = `Loading audio… ${percent}% (${mb}/${totalMb} MB)`;
+                        } else {
+                            const mb = (event.loaded / 1024 / 1024).toFixed(1);
+                            audioStatus.textContent = `Loading audio… ${mb} MB`;
                         }
                     };
 
                     xhr.onload = () => {
                         if (xhr.status === 200) {
-                            resolve(xhr.response);
+                            audioProgress.value = 100;
+                            audioLoader.classList.add("ready");
+                            audioStatus.textContent = "Audio ready — click anywhere to play";
+                            resolve(new Uint8Array(xhr.response));
                         } else {
                             reject(new Error(`Failed to load ${url}, status ${xhr.status}`));
                         }
@@ -207,9 +202,13 @@
                     xhr.send();
                 });
             }
-        </script>
-        <script>
-            var Pd4Web = null;
+
+            audioReady = preloadAudio(AUDIO_FILE).catch((err) => {
+                console.error("Audio preload failed:", err);
+                audioStatus.textContent = "Failed to load audio";
+                audioProgress.style.display = "none";
+                audioReady = null;
+            });
 
             Pd4WebModule().then((Pd4WebModulePromise) => {
                 Pd4Web = new Pd4WebModulePromise.Pd4Web();
@@ -217,26 +216,36 @@
                     renderGui: false,
                 });
 
-                async function loadAudio(filename) {
-                    const res = await fetch(filename);
-                    if (!res.ok) throw new Error("Failed to download audio");
-                    const arrayBuffer = await res.arrayBuffer();
-                    const file = filename;
-                    const uint8 = new Uint8Array(arrayBuffer);
-                    if (Pd4Web) {
-                        Pd4Web.sendFile(uint8, file);
-                    }
-                }
+                // Override patch defaults (delta=180 forces region to 0) before any ori_rcv.
+                Pd4Web.sendSymbol("alfa", "0");
+                Pd4Web.sendSymbol("delta", "90");
+                Pd4Web.sendSymbol("vol1", "1");
+                Pd4Web.sendSymbol("vol2", "1");
+                Pd4Web.sendSymbol("fcut1", "16000");
+                Pd4Web.sendSymbol("fcut2", "16000");
 
                 document.addEventListener(
                     "click",
                     async () => {
-                        await Pd4Web.init();
-                        await loadAudio("./esquerda.wav");
-                        setTimeout(() => {
-                            Pd4Web.sendSymbol("NewPathTosnd1", "./esquerda.wav");
-                            Pd4Web.sendBang("pplaysnd1");
-                        }, 100);
+                        Pd4Web.init();
+
+                        audioStatus.textContent = "Preparing audio…";
+                        audioProgress.style.display = "none";
+
+                        const uint8 = await audioReady;
+                        if (!uint8) {
+                            audioStatus.textContent = "Failed to load audio";
+                            return;
+                        }
+
+                        // sendFile copies into WASM FS; yield so the UI can paint first.
+                        await new Promise((r) => setTimeout(r, 0));
+                        Pd4Web.sendFile(uint8, AUDIO_FILE);
+
+                        audioLoader.classList.add("hidden");
+
+                        Pd4Web.sendSymbol("NewPathTosnd1", AUDIO_FILE);
+                        Pd4Web.sendBang("pplaysnd1");
                     },
                     { once: true },
                 );
@@ -250,19 +259,28 @@
 
             AFRAME.registerComponent("watch-transform", {
                 schema: {
-                    eps: { type: "number", default: 0.1 }, // limiar para evitar ruído
+                    eps: { type: "number", default: 0.0008 },
+                },
+                init: function () {
+                    this.position = new THREE.Vector3();
+                    this.lastSent = new THREE.Vector3();
+                    this.hasSent = false;
                 },
                 tick: function () {
-                    //window.addEventListener("click", () => {
-                        const position = new THREE.Vector3();
-                        this.el.object3D.getWorldPosition(position);
+                    if (!Pd4Web) return;
 
-                        //const rotation = this.el.object3D.rotation;   
-                        if (Pd4Web) {
-                            console.log("Position", position.y, position.z, position.x);
-                            Pd4Web.sendList("ori_rcv", [position.y, position.z, position.x]);
-                        }
-                    //});
+                    this.el.object3D.getWorldPosition(this.position);
+                    if (this.hasSent && this.position.distanceTo(this.lastSent) < this.data.eps) {
+                        return;
+                    }
+
+                    this.lastSent.copy(this.position);
+                    this.hasSent = true;
+                    Pd4Web.sendList("ori_rcv", [
+                        this.position.y,
+                        this.position.z,
+                        this.position.x,
+                    ]);
                 },
             });
 
