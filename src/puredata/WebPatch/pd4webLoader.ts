@@ -34,16 +34,20 @@ function loadClassicScript(src: string): Promise<void> {
   });
 }
 
-function waitForCrossOriginIsolation(timeoutMs = 5000): Promise<void> {
+function waitForCrossOriginIsolation(timeoutMs: number): Promise<boolean> {
   if (globalThis.crossOriginIsolated) {
-    return Promise.resolve();
+    return Promise.resolve(true);
   }
 
   return new Promise((resolve) => {
     const deadline = Date.now() + timeoutMs;
     const tick = () => {
-      if (globalThis.crossOriginIsolated || Date.now() >= deadline) {
-        resolve();
+      if (globalThis.crossOriginIsolated) {
+        resolve(true);
+        return;
+      }
+      if (Date.now() >= deadline) {
+        resolve(false);
         return;
       }
       requestAnimationFrame(tick);
@@ -52,22 +56,42 @@ function waitForCrossOriginIsolation(timeoutMs = 5000): Promise<void> {
   });
 }
 
+function crossOriginIsolationError(): Error {
+  const { origin, pathname } = globalThis.location;
+  return new Error(
+    [
+      "Pd4Web requires crossOriginIsolated (COEP/COOP headers on this page).",
+      `Current page: ${origin}${pathname}`,
+      "Checks:",
+      "- Use http://localhost:4321/story/... when running npm run dev:hot (not port 3000).",
+      "- Remove DEV_DISABLE_COEP=1 from .env if present.",
+      "- Use Chrome or Edge (not private/incognito).",
+      "- Hard-refresh after changing .env (Ctrl+Shift+R).",
+    ].join("\n"),
+  );
+}
+
 async function ensureCrossOriginIsolation(): Promise<void> {
   if (globalThis.crossOriginIsolated) {
     return;
   }
 
-  // pd4web.threads.js installs a COI service worker when the page is not yet
-  // cross-origin isolated. That helper only controls its own directory scope,
-  // so preview/story pages must already send COEP/COOP headers from the server.
-  await loadClassicScript(pd4webThreadsScriptUrl);
-  await waitForCrossOriginIsolation();
+  // Story/preview pages must send COEP/COOP from the server (Vite dev plugin or
+  // Express middleware). pd4web.threads.js registers a service worker scoped to
+  // /_astro/ only, so it cannot isolate /story/ documents and may cause extra
+  // reloads on Windows without fixing isolation.
+  const isolated = await waitForCrossOriginIsolation(3000);
+  if (!isolated) {
+    throw crossOriginIsolationError();
+  }
 }
 
 let loadPromise: Promise<Pd4WebModuleFactory> | undefined;
 
 export default function loadPd4WebModuleFactory(): Promise<Pd4WebModuleFactory> {
   loadPromise ??= (async () => {
+    console.info("[Pd4Web] loading assets", pd4WebAssetUrls);
+
     await ensureCrossOriginIsolation();
     await loadClassicScript(pd4webScriptUrl);
 
