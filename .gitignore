@@ -29,6 +29,7 @@ pnpm-debug.log*
 *.js
 !astro.config.mjs
 !public/scripts/**/*.js
+!public/puredata/WebPatch/pd4web*.js
 !src/puredata/WebPatch/pd4web*.js
 
 # Heroku Postgres dumps

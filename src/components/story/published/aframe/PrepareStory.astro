@@ -39,6 +39,7 @@ const serializedStory = DOMPurify.sanitize(
   import type { Current, RenderOptions } from "./types";
   import loadPd4WebModuleFactory, {
     pd4WebAssetUrls,
+    pd4WebMainScriptUrlOrBlob,
   } from "@puredata/WebPatch/pd4webLoader";
 
   /// <reference path="../../../../puredata/WebPatch/pd4web.d.ts" />
@@ -314,7 +315,10 @@ const serializedStory = DOMPurify.sanitize(
 
   loadPd4WebModuleFactory()
     .then((Pd4WebModuleFactory) =>
-      Pd4WebModuleFactory({ locateFile: locatePd4WebAsset }),
+      Pd4WebModuleFactory({
+        locateFile: locatePd4WebAsset,
+        mainScriptUrlOrBlob: pd4WebMainScriptUrlOrBlob,
+      }),
     )
     .then((module) => {
       pd4Web = new module.Pd4Web();

@@ -1,4 +1,4 @@
-import { spawn } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 
@@ -49,6 +49,18 @@ const shutdown = (code = 0) => {
 
 process.on("SIGINT", () => shutdown(0));
 process.on("SIGTERM", () => shutdown(0));
+
+const copyPd4Web = spawnSync("npm", ["run", "copy:pd4web"], {
+  stdio: "inherit",
+  shell: true,
+  env: {
+    ...process.env,
+    ...envFromFile,
+  },
+});
+if (copyPd4Web.status !== 0) {
+  process.exit(copyPd4Web.status ?? 1);
+}
 
 run("npm", ["run", "astro:dev"], "astro");
 run("npm", ["run", "dev:api"], "api");

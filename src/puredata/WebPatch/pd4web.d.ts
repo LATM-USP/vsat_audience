@@ -1,6 +1,8 @@
 declare namespace pd4web {
   export type Pd4WebModuleOptions = {
     locateFile?: (path: string, scriptDirectory?: string) => string;
+    /** Blob URL or script URL for Emscripten pthread workers (required under COEP). */
+    mainScriptUrlOrBlob?: string;
   };
 
   export type Pd4WebModule = (options?: Pd4WebModuleOptions) => Promise<{
@@ -207,6 +209,8 @@ declare module "@puredata/WebPatch/pd4webLoader" {
     readonly threads: string;
   };
 
+  export let pd4WebMainScriptUrlOrBlob: string | undefined;
+
   export default function loadPd4WebModuleFactory(): Promise<pd4web.Pd4WebModule>;
 }
 
@@ -216,25 +220,5 @@ declare module "@puredata/WebPatch/pd4web.js" {
 }
 
 declare module "@puredata/WebPatch/pd4web.threads.js" {}
-
-declare module "@puredata/WebPatch/pd4web.js?url" {
-  const url: string;
-  export default url;
-}
-
-declare module "@puredata/WebPatch/pd4web.threads.js?url" {
-  const url: string;
-  export default url;
-}
-
-declare module "@puredata/WebPatch/pd4web.wasm?url" {
-  const url: string;
-  export default url;
-}
-
-declare module "@puredata/WebPatch/pd4web.data?url" {
-  const url: string;
-  export default url;
-}
 
 export {};

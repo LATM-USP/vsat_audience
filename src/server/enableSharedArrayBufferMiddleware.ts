@@ -7,9 +7,6 @@ const headersToEnableSharedArrayBuffer = new Map([
   ["Cross-Origin-Opener-Policy", "same-origin"],
 ]);
 
-const isSameOriginStaticAsset = (path: string) =>
-  /\.(js|mjs|wasm|data|css)$/i.test(path);
-
 /**
  * Middleware that adds headers to the response so that `SharedArrayBuffer`s
  * can be used.
@@ -18,20 +15,14 @@ const isSameOriginStaticAsset = (path: string) =>
  */
 function enableSharedArrayBufferMiddleware(): RequestHandler {
   return (req, res, next) => {
-    const isPd4WebAsset =
-      req.path.startsWith("/puredata/WebPatch/") ||
-      /\/_astro\/pd4web\./.test(req.path);
+    const isDocument =
+      !/\.[a-z0-9]+$/i.test(req.path) && !req.path.startsWith("/api");
 
-    if (isPd4WebAsset || isSameOriginStaticAsset(req.path)) {
-      res.setHeader("Cross-Origin-Resource-Policy", "same-origin");
-    }
-
-    /*
-     * We only want to enable SharedArayBuffer support
-     * on the subset of pages that actually need it.
-     */
-    if (req.path.startsWith("/story") || req.path.endsWith("/preview")) {
+    if (isDocument && (req.path.startsWith("/story") || req.path.endsWith("/preview"))) {
       res.setHeaders(headersToEnableSharedArrayBuffer);
+    } else if (!isDocument) {
+      res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
+      res.setHeader("Access-Control-Allow-Origin", "*");
     }
 
     return next();
