@@ -111,6 +111,26 @@ const serializedStory = DOMPurify.sanitize(
 
   const READSF_CHANNEL_COUNT = 6;
 
+  function showPd4WebStatus(message: string, isError = false) {
+    const id = "vsat-pd4web-status";
+    let el = document.getElementById(id);
+    if (!el) {
+      el = document.createElement("div");
+      el.id = id;
+      el.style.cssText =
+        "position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:99999;max-width:90vw;padding:10px 14px;border-radius:6px;font:14px/1.4 sans-serif;box-shadow:0 2px 12px rgba(0,0,0,.25);";
+      document.body.appendChild(el);
+    }
+    el.style.background = isError ? "#fdecea" : "#e8f5e9";
+    el.style.color = isError ? "#611a15" : "#1b5e20";
+    el.style.border = isError ? "1px solid #f5c2c0" : "1px solid #a5d6a7";
+    el.textContent = message;
+  }
+
+  function hidePd4WebStatus() {
+    document.getElementById("vsat-pd4web-status")?.remove();
+  }
+
   const locatePd4WebAsset = (path: string) => {
     if (path.endsWith(".wasm")) {
       return pd4WebAssetUrls.wasm;
@@ -323,10 +343,12 @@ const serializedStory = DOMPurify.sanitize(
     .then((module) => {
       pd4Web = new module.Pd4Web();
       pd4Web.openPatch("index.pd", { renderGui: false });
-      console.info(
-        "[Pd4Web] patch loaded",
-        globalThis.crossOriginIsolated ? "(cross-origin isolated)" : "(not cross-origin isolated — audio may fail)",
+      console.info("[Pd4Web] patch loaded (cross-origin isolated)");
+      showPd4WebStatus(
+        "Pd4Web ready — move the mouse or click play to start scene audio",
+        false,
       );
+      window.setTimeout(hidePd4WebStatus, 8000);
 
       pd4Web.onBangReceived("snd1played", (_bangName: string) => {
         if (!pd4Web || !pd4WebCurrentAudioPath) {
@@ -336,9 +358,12 @@ const serializedStory = DOMPurify.sanitize(
       });
     })
     .catch((error) => {
-      console.error(
-        "[Pd4Web] failed to load — check COEP headers, browser console network tab for pd4web.wasm/pd4web.data, and that DEV_DISABLE_COEP is not set",
-        error,
+      console.error("[Pd4Web] failed to load", error);
+      showPd4WebStatus(
+        error instanceof Error
+          ? error.message
+          : "Pd4Web failed to load — see browser console",
+        true,
       );
     });
 

@@ -28,10 +28,13 @@ Optional (development only):
 DEV_AUTH_BYPASS=1
 DEV_AUTH_BYPASS_EMAIL=dev@localhost
 DEV_AUTH_BYPASS_NAME=Dev User
-DEV_DISABLE_COEP=1
 DEV_DISABLE_OVERLAY=1
 DEV_API_PORT=3001
 ```
+
+> **Do not set `DEV_DISABLE_COEP=1`** if you need Pd4Web ambisonic audio in story
+> scenes. That flag disables the COEP/COOP headers required for
+> `SharedArrayBuffer` / cross-origin isolation.
 
 `DEV_AUTH_BYPASS` only applies when `NODE_ENV=development` and the request host
 is local (`localhost`, `127.0.0.1`, `::1`, or `*.localhost`).
