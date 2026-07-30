@@ -319,6 +319,10 @@ const serializedStory = DOMPurify.sanitize(
     .then((module) => {
       pd4Web = new module.Pd4Web();
       pd4Web.openPatch("index.pd", { renderGui: false });
+      console.info(
+        "[Pd4Web] patch loaded",
+        globalThis.crossOriginIsolated ? "(cross-origin isolated)" : "(not cross-origin isolated — audio may fail)",
+      );
 
       pd4Web.onBangReceived("snd1played", (_bangName: string) => {
         if (!pd4Web || !pd4WebCurrentAudioPath) {
@@ -326,6 +330,12 @@ const serializedStory = DOMPurify.sanitize(
         }
         void startPd4WebAudioPlayback(pd4Web, pd4WebCurrentAudioPath);
       });
+    })
+    .catch((error) => {
+      console.error(
+        "[Pd4Web] failed to load — check COEP headers, browser console network tab for pd4web.wasm/pd4web.data, and that DEV_DISABLE_COEP is not set",
+        error,
+      );
     });
 
   AFRAME.registerComponent("story", {
