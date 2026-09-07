@@ -258,7 +258,7 @@ const serializedStory = DOMPurify.sanitize(
   function configurePd4WebEq(pd4WebInstance: pd4web.Pd4Web) {
     sendPd4WebEqParam(pd4WebInstance, "alfa", 90);
     // Patch loadbang sets delta=180, which forces region 0 forever unless overridden.
-    sendPd4WebEqParam(pd4WebInstance, "delta", 90);
+    sendPd4WebEqParam(pd4WebInstance, "delta", 45);
     sendPd4WebEqParam(pd4WebInstance, "vol1", 1);
     sendPd4WebEqParam(pd4WebInstance, "vol2", 1);
     sendPd4WebEqParam(pd4WebInstance, "fcut1", 16000);
@@ -273,7 +273,7 @@ const serializedStory = DOMPurify.sanitize(
     pd4WebInstance.sendList("ori_rcv", [
       direction.y,
       direction.z,
-      direction.x,
+      direction.x * -1,
     ]);
   }
 
